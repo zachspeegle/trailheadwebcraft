@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>About | Trailhead WebCraft — Local SEO for Sevier County</title>
+  <meta name="description" content="Retired U.S. Naval Officer. MBA. Deep Sevier County market knowledge. One person, full accountability, specialized in local SEO for Gatlinburg, Pigeon Forge, and Sevierville tourism businesses." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://trailheadwebcraft.com/about.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://trailheadwebcraft.com/about.html" />
+  <meta property="og:title" content="About | Trailhead WebCraft" />
+  <meta property="og:description" content="Retired Naval Officer. MBA. Built for Sevier County. Not for everyone." />
+  <meta property="og:image" content="https://trailheadwebcraft.com/assets/og-image.jpg" />
+
+  <!-- GA4 Placeholder -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+  -->
+
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+
+    /* About-specific layout */
+    .about-body {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-prose section {
+      margin-bottom: 3.5rem;
+      padding-bottom: 3.5rem;
+      border-bottom: 1px solid var(--limestone);
+    }
+
+    .about-prose section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .about-prose h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+      font-weight: 700;
+      color: var(--summit-green);
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+
+    .about-prose p {
+      font-size: 0.97rem;
+      line-height: 1.8;
+      color: var(--bark);
+      margin-bottom: 1.1rem;
+    }
+
+    .about-prose p:last-child { margin-bottom: 0; }
+
+    /* Pull quote */
+    .pull-quote {
+      border-left: 3px solid var(--trail-amber);
+      padding: 1rem 1.5rem;
+      margin: 2rem 0;
+      background: var(--mist);
+      clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+    }
+
+    .pull-quote p {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--summit-green) !important;
+      line-height: 1.5;
+      margin: 0 !important;
+    }
+
+    /* Sidebar */
+    .about-sidebar {
+      position: sticky;
+      top: 6rem;
+    }
+
+    .sidebar-card {
+      background: var(--summit-green);
+      clip-path: var(--clip-corner-lg);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar-card h3 {
+      font-family: var(--font-label);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--trail-amber);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(196,154,10,0.25);
+    }
+
+    .credential-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .cred-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .cred-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .cred-body h4 {
+      font-family: var(--font-label);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--off-white);
+      margin-bottom: 0.2rem;
+    }
+
+    .cred-body p {
+      font-size: 0.82rem;
+      color: var(--fog);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .sidebar-cta-card {
+      background: var(--trail-amber);
+      clip-path: var(--clip-corner-lg);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .sidebar-cta-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--summit-green);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .sidebar-cta-card p {
+      font-size: 0.85rem;
+      color: var(--pine-ridge);
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+
+    /* Philosophy markers */
+    .philosophy-point {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      margin-bottom: 1.75rem;
+    }
+
+    .philosophy-marker {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: var(--summit-green);
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.2rem;
+    }
+
+    .philosophy-marker span {
+      font-family: var(--font-label);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--trail-amber);
+    }
+
+    .philosophy-point p {
+      margin: 0 !important;
+    }
+
+    /* Closing banner */
+    .about-closing {
+      background: var(--summit-green);
+      padding: 4rem 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-closing-topo {
+      position: absolute;
+      inset: 0;
+      opacity: 0.06;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cg fill='none' stroke='%23C49A0A' stroke-width='1'%3E%3Cellipse cx='400' cy='400' rx='50' ry='30'/%3E%3Cellipse cx='400' cy='400' rx='100' ry='65'/%3E%3Cellipse cx='400' cy='400' rx='155' ry='105'/%3E%3Cellipse cx='400' cy='400' rx='215' ry='148'/%3E%3Cellipse cx='400' cy='400' rx='278' ry='195'/%3E%3Cellipse cx='400' cy='400' rx='345' ry='245'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 600px 600px;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .about-closing-content {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .about-closing blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      font-style: italic;
+      color: var(--off-white);
+      line-height: 1.3;
+      margin-bottom: 1.75rem;
+    }
+
+    .about-closing blockquote em {
+      color: var(--trail-amber);
+      font-style: normal;
+    }
+
+    @media (max-width: 900px) {
+      .about-body {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .about-sidebar {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">
+      Trailhead WebCraft
+      <span>Sevier County Local SEO</span>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="insights.html">Insights</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="nav-cta">Get Started</a>
+    <button class="nav-hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="nav-mobile" role="dialog" aria-label="Mobile navigation">
+    <button class="nav-mobile-close" aria-label="Close menu">✕</button>
+    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="insights.html">Insights</a>
+    <a href="contact.html">Contact</a>
+    <a href="contact.html" class="btn btn-primary" style="margin-top:1rem;">Get Started</a>
+  </div>
+
+  <main>
+
+    <!-- PAGE HERO -->
+    <section class="page-hero" aria-label="About hero">
+      <div class="page-hero-topo" aria-hidden="true"></div>
+      <div class="page-hero-content">
+        <div class="section-label" style="margin-bottom:1.25rem;">
+          <span class="amber-rule"></span>
+          <span class="label-text">The Story</span>
+        </div>
+        <h1>Built for Sevier County.<br />Not for Everyone.</h1>
+        <p>One person. One market. One specialty. That's the whole model.</p>
+      </div>
+    </section>
+
+    <!-- MAIN ABOUT CONTENT -->
+    <section class="section section--mist" aria-labelledby="about-heading">
+      <div class="container">
+        <div class="about-body">
+
+          <!-- PROSE COLUMN -->
+          <div class="about-prose" id="about-heading">
+
+            <!-- Why This Market -->
+            <section aria-labelledby="why-heading">
+              <div class="section-label">
+                <span class="amber-rule"></span>
+                <span class="label-text">Why This Market</span>
+              </div>
+              <h2 id="why-heading">Eleven Million Visitors. Most Businesses Invisible to Half of Them.</h2>
+              <p>
+                Sevier County runs on tourism. Eleven million visitors a year, most of them searching online before they ever pack a bag. They're looking for a cabin with mountain views, a restaurant in walking distance of the Parkway, an attraction the kids haven't done yet.
+              </p>
+              <p>
+                Most of those searches end the same way — the same few businesses appear at the top, get the click, and fill the calendar. The businesses below them do good work. They just don't show up.
+              </p>
+              <p>
+                That's not a product problem. It's a visibility problem. And it's fixable.
+              </p>
+              <div class="pull-quote">
+                <p>"The difference between a full calendar and a slow week isn't always the quality of the product. Often it's whether the right people can find you when it matters."</p>
+              </div>
+            </section>
+
+            <!-- Who I Am -->
+            <section aria-labelledby="who-heading">
+              <div class="section-label">
+                <span class="amber-rule"></span>
+                <span class="label-text">Who I Am</span>
+              </div>
+              <h2 id="who-heading">Trained to Assess, Plan, and Execute. Applied to Local Search.</h2>
+              <p>
+                I'm a retired U.S. Naval Officer with an MBA. That combination means two things in practice: I don't guess, and I don't overcomplicate.
+              </p>
+              <p>
+                Military service trains you to assess a situation accurately, build a plan that's executable under pressure, and follow through without cutting corners. An MBA trains you to tie every decision back to a business outcome. Applied to local SEO, that means you get a clear diagnosis, a prioritized plan, and work you can actually track.
+              </p>
+              <p>
+                I'm not a marketing kid running paid ads. I'm not an agency with twelve clients and a junior account manager handling yours. I do one thing — local search optimization for Sevier County tourism businesses — and I do it with the same discipline I brought to two decades in uniform.
+              </p>
+            </section>
+
+            <!-- The Philosophy -->
+            <section aria-labelledby="philosophy-heading">
+              <div class="section-label">
+                <span class="amber-rule"></span>
+                <span class="label-text">The Philosophy</span>
+              </div>
+              <h2 id="philosophy-heading">Honest Work. Straight Talk. No Packages.</h2>
+              <p>I don't sell packages. I give you an honest read of where you stand.</p>
+
+              <div style="margin: 2rem 0;">
+                <div class="philosophy-point">
+                  <div class="philosophy-marker"><span>01</span></div>
+                  <p>If your Google Business Profile has the wrong primary category, I'll tell you — and fix it.</p>
+                </div>
+                <div class="philosophy-point">
+                  <div class="philosophy-marker"><span>02</span></div>
+                  <p>If your NAP citations are inconsistent across forty directories, I'll show you the damage and clean it up.</p>
+                </div>
+                <div class="philosophy-point">
+                  <div class="philosophy-marker"><span>03</span></div>
+                  <p>If your review velocity is half what your top competitor's is, we'll build a plan to close the gap.</p>
+                </div>
+                <div class="philosophy-point">
+                  <div class="philosophy-marker"><span>04</span></div>
+                  <p>And if I look at your setup and there's nothing materially wrong, I'll tell you that too.</p>
+                </div>
+              </div>
+
+              <p>
+                You'll leave the Base Camp Assessment knowing the truth about your local presence — not a sales pitch dressed as an audit.
+              </p>
+              <p>
+                One person. Full accountability. No relay through an account manager. You'll always deal directly with me.
+              </p>
+            </section>
+
+          </div>
+
+          <!-- SIDEBAR COLUMN -->
+          <aside class="about-sidebar" aria-label="Credentials">
+
+            <div class="sidebar-card">
+              <h3>Credentials</h3>
+              <div class="credential-stack">
+                <div class="cred-row">
+                  <div class="cred-icon">⚓</div>
+                  <div class="cred-body">
+                    <h4>Retired U.S. Naval Officer</h4>
+                    <p>Process-driven by training. No guessing, no shortcuts, no excuses.</p>
+                  </div>
+                </div>
+                <div class="cred-row">
+                  <div class="cred-icon">📐</div>
+                  <div class="cred-body">
+                    <h4>MBA</h4>
+                    <p>Every recommendation ties back to visibility and revenue — not vanity metrics.</p>
+                  </div>
+                </div>
+                <div class="cred-row">
+                  <div class="cred-icon">🏔️</div>
+                  <div class="cred-body">
+                    <h4>Sevier County Local</h4>
+                    <p>This isn't a market I studied from a distance. I know the terrain.</p>
+                  </div>
+                </div>
+                <div class="cred-row">
+                  <div class="cred-icon">🎯</div>
+                  <div class="cred-body">
+                    <h4>Tourism SEO Specialist</h4>
+                    <p>Cabins, restaurants, attractions, shops. This is all I do. Deep beats wide.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sidebar-cta-card">
+              <h3>Ready to Find Out Where You Stand?</h3>
+              <p>A 15-minute call costs nothing. You'll leave knowing exactly where your local presence stands.</p>
+              <a href="contact.html" class="btn btn-dark">Book a Free Call</a>
+            </div>
+
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING QUOTE BANNER -->
+    <section class="about-closing" aria-label="Closing">
+      <div class="about-closing-topo" aria-hidden="true"></div>
+      <div class="about-closing-content">
+        <div class="section-label" style="justify-content:center; margin-bottom:1.5rem;">
+          <span class="amber-rule"></span>
+          <span class="label-text" style="color: var(--trail-amber);">The Promise</span>
+        </div>
+        <blockquote>
+          "The trail to more customers starts here.<br />
+          Let's find out where <em>yours</em> is."
+        </blockquote>
+        <a href="contact.html" class="btn btn-primary">Book Your Free 15-Min Call</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          Trailhead WebCraft
+          <span>Sevier County Local SEO</span>
+        </a>
+        <p>Local SEO and GEO optimization for tourism businesses in Gatlinburg, Pigeon Forge, and Sevierville, Tennessee.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="services.html#base-camp">Base Camp Assessment</a></li>
+          <li><a href="services.html#the-map">The Map</a></li>
+          <li><a href="services.html#the-guide">The Guide</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="insights.html">Insights</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Trailhead WebCraft. Sevier County, Tennessee.</p>
+      <div class="amber-line"></div>
+      <p>Built for the mountains.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
