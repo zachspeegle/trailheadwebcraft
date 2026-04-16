@@ -19,20 +19,20 @@
     }
 
     :root {
-      --bg:          #0a0e07;
-      --bg-surface:  #0f1409;
-      --bg-card:     #141c0d;
+      --bg:            #0a0e07;
+      --bg-surface:    #0f1409;
+      --bg-card:       #141c0d;
       --bg-card-hover: #1a2412;
-      --text:        #e2d9c4;
-      --text-muted:  #7a8870;
-      --text-faint:  #4a5540;
-      --accent:      #c8860a;
-      --accent-light:#e09c1a;
-      --accent-glow: rgba(200, 134, 10, 0.18);
-      --moss:        #3a5830;
-      --moss-light:  #527046;
-      --border:      rgba(90, 115, 70, 0.14);
-      --border-mid:  rgba(90, 115, 70, 0.22);
+      --text:          #e2d9c4;
+      --text-muted:    #7a8870;
+      --text-faint:    #4a5540;
+      --accent:        #c8860a;
+      --accent-light:  #e09c1a;
+      --accent-glow:   rgba(200, 134, 10, 0.18);
+      --moss:          #3a5830;
+      --moss-light:    #527046;
+      --border:        rgba(90, 115, 70, 0.14);
+      --border-mid:    rgba(90, 115, 70, 0.22);
       --border-accent: rgba(200, 134, 10, 0.28);
     }
 
@@ -101,13 +101,6 @@
     /* ─────────────────────────────────────────
        ATMOSPHERIC BACKGROUND
     ───────────────────────────────────────── */
-    .bg-layer {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
     #topo-canvas {
       position: fixed;
       inset: 0;
@@ -124,7 +117,6 @@
       opacity: 0.22;
     }
 
-    /* Organic grain overlay */
     .grain-overlay {
       position: fixed;
       inset: 0;
@@ -168,7 +160,6 @@
     .reveal.d1 { transition-delay: 0.08s; }
     .reveal.d2 { transition-delay: 0.16s; }
     .reveal.d3 { transition-delay: 0.24s; }
-    .reveal.d4 { transition-delay: 0.32s; }
 
     /* ─────────────────────────────────────────
        NAVIGATION
@@ -325,6 +316,7 @@
        ① HERO
     ───────────────────────────────────────── */
     #hero {
+      position: relative; /* needed for .hero-scroll absolute positioning */
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -475,7 +467,6 @@
       transition: background 0.3s ease;
     }
 
-    /* Warm sweep on hover — bottom border */
     .service-card::after {
       content: '';
       position: absolute;
@@ -814,7 +805,6 @@
       .footer-nav { flex-wrap: wrap; gap: 1.25rem; }
     }
 
-    /* Hide cursor on touch devices */
     @media (pointer: coarse) {
       .cursor-dot, .cursor-ring { display: none; }
       body { cursor: auto; }
@@ -828,9 +818,9 @@
   <div class="cursor-ring" id="cursorRing"></div>
 
   <!-- ── Atmospheric Background ── -->
-  <canvas id="topo-canvas" aria-hidden="true"></canvas>
+  <canvas id="topo-canvas"     aria-hidden="true"></canvas>
   <canvas id="particle-canvas" aria-hidden="true"></canvas>
-  <div class="grain-overlay" aria-hidden="true"></div>
+  <div class="grain-overlay"   aria-hidden="true"></div>
 
   <!-- ─────────────────────────────────────────
        NAVIGATION
@@ -840,6 +830,7 @@
     <ul class="nav-links" role="list">
       <li><a href="#services">Services</a></li>
       <li><a href="#about">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
       <li><a href="bca.html" class="nav-cta-link">Start Here</a></li>
     </ul>
   </nav>
@@ -850,7 +841,7 @@
   <section id="hero" aria-label="Hero">
     <div class="hero-inner">
       <p class="eyebrow reveal">
-        Web Design &nbsp;·&nbsp; Development &nbsp;·&nbsp; Brand Identity
+        Web Design &nbsp;·&nbsp; Search Optimization &nbsp;·&nbsp; Brand Identity
       </p>
       <h1 class="display-heading hero-title reveal d1">
         Trailhead<br><em>WebCraft</em>
@@ -923,7 +914,6 @@
 
       <!-- Web Design -->
       <div class="service-card reveal">
-        <!-- Tree / branching growth icon -->
         <svg class="service-icon" viewBox="0 0 48 48" fill="none"
              xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <line x1="24" y1="40" x2="24" y2="22" stroke="currentColor"
@@ -947,31 +937,25 @@
         <p class="service-desc">
           Intentional, hand-crafted digital environments where every element is placed with purpose.
           We design experiences that feel as considered as the landscape they inhabit — no templates,
-          no shortcuts, no shortcuts.
+          no generic layouts, nothing off the shelf.
         </p>
         <p class="service-tags">Design &nbsp;·&nbsp; UX &nbsp;·&nbsp; Visual Systems</p>
       </div>
 
       <!-- Search Optimization -->
       <div class="service-card reveal d1">
-        <!-- Binoculars / visibility through terrain icon -->
         <svg class="service-icon" viewBox="0 0 48 48" fill="none"
              xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- left lens -->
           <circle cx="15" cy="28" r="8" stroke="currentColor" stroke-width="1.5"/>
           <circle cx="15" cy="28" r="3.5" fill="currentColor" opacity="0.2"/>
-          <!-- right lens -->
           <circle cx="33" cy="28" r="8" stroke="currentColor" stroke-width="1.5"/>
           <circle cx="33" cy="28" r="3.5" fill="currentColor" opacity="0.2"/>
-          <!-- bridge -->
           <path d="M23 26 C23 26 24 23 25 26" stroke="currentColor"
                 stroke-width="1.3" stroke-linecap="round" fill="none"/>
-          <!-- sight lines from each lens upward -->
           <line x1="15" y1="20" x2="15" y2="13" stroke="currentColor"
                 stroke-width="1" stroke-dasharray="2 3" opacity="0.4" stroke-linecap="round"/>
           <line x1="33" y1="20" x2="33" y2="13" stroke="currentColor"
                 stroke-width="1" stroke-dasharray="2 3" opacity="0.4" stroke-linecap="round"/>
-          <!-- distant target / summit -->
           <path d="M20 11 L24 6 L28 11" stroke="currentColor" stroke-width="1.3"
                 stroke-linecap="round" stroke-linejoin="round" opacity="0.55" fill="none"/>
         </svg>
@@ -987,25 +971,18 @@
 
       <!-- Brand Identity -->
       <div class="service-card reveal d2">
-        <!-- Compass rose icon -->
         <svg class="service-icon" viewBox="0 0 48 48" fill="none"
              xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <circle cx="24" cy="24" r="17" stroke="currentColor"
                   stroke-width="1.4" opacity="0.22"/>
           <circle cx="24" cy="24" r="10" stroke="currentColor"
-                  stroke-width="0.8" stroke-dasharray="2.5 4.5"
-                  opacity="0.2"/>
+                  stroke-width="0.8" stroke-dasharray="2.5 4.5" opacity="0.2"/>
           <circle cx="24" cy="24" r="2.8" fill="currentColor" opacity="0.65"/>
-          <!-- N needle -->
-          <path d="M24 13 L26.2 22.5 L24 24.5 L21.8 22.5 Z"
-                fill="currentColor"/>
-          <!-- S needle -->
+          <path d="M24 13 L26.2 22.5 L24 24.5 L21.8 22.5 Z" fill="currentColor"/>
           <path d="M24 35 L21.8 25.5 L24 23.5 L26.2 25.5 Z"
                 fill="currentColor" opacity="0.35"/>
-          <!-- E needle -->
           <path d="M35 24 L25.5 21.8 L23.5 24 L25.5 26.2 Z"
                 fill="currentColor" opacity="0.55"/>
-          <!-- W needle -->
           <path d="M13 24 L22.5 26.2 L24.5 24 L22.5 21.8 Z"
                 fill="currentColor" opacity="0.3"/>
           <line x1="24" y1="7"  x2="24" y2="10" stroke="currentColor"
@@ -1158,6 +1135,8 @@
       <ul class="footer-nav" role="list">
         <li><a href="#services">Services</a></li>
         <li><a href="#about">About</a></li>
+        <li><a href="bca.html">Base Camp Assessment</a></li>
+        <li><a href="contact.html">Contact</a></li>
         <li><a href="tel:8652176804">865-217-6804</a></li>
       </ul>
       <p class="footer-copy">© 2026 Trailhead WebCraft · All rights reserved</p>
@@ -1185,9 +1164,7 @@
       dot.style.top  = my + 'px';
     });
 
-    // Hover state on interactive elements
-    const hoverEls = document.querySelectorAll('a, button, .service-card');
-    hoverEls.forEach(el => {
+    document.querySelectorAll('a, button, .service-card').forEach(el => {
       el.addEventListener('mouseenter', () => {
         dot.classList.add('is-hovering');
         ring.classList.add('is-hovering');
@@ -1198,7 +1175,6 @@
       });
     });
 
-    // Ring follows with inertia
     (function animateRing() {
       rx += (mx - rx) * 0.1;
       ry += (my - ry) * 0.1;
@@ -1238,7 +1214,7 @@
           tc.beginPath();
           const steps = 120;
           for (let i = 0; i <= steps; i++) {
-            const a = (i / steps) * Math.PI * 2;
+            const a  = (i / steps) * Math.PI * 2;
             const n1 = Math.sin(a * 2.8 + topoTime * 0.9 + ci * 1.4) * 14;
             const n2 = Math.sin(a * 5.5 - topoTime * 0.5 + ci * 2.1) * 7;
             const n3 = Math.cos(a * 9   + topoTime * 1.2 + ci * 0.7) * 4;
@@ -1248,7 +1224,6 @@
             i === 0 ? tc.moveTo(x, y) : tc.lineTo(x, y);
           }
           tc.closePath();
-          // Slightly dimmer on outer rings
           const alpha = 0.55 * (1 - (r / maxR) * 0.6);
           tc.strokeStyle = `rgba(78, 110, 62, ${alpha})`;
           tc.lineWidth = 0.7;
@@ -1279,14 +1254,14 @@
       const count = Math.min(70, Math.floor((PW * PH) / 18000));
       for (let i = 0; i < count; i++) {
         particles.push({
-          x:      Math.random() * PW,
-          y:      Math.random() * PH,
-          r:      0.7 + Math.random() * 1.8,
-          vx:     (Math.random() - 0.5) * 0.25,
-          vy:     -0.08 - Math.random() * 0.22,
+          x:       Math.random() * PW,
+          y:       Math.random() * PH,
+          r:       0.7 + Math.random() * 1.8,
+          vx:      (Math.random() - 0.5) * 0.25,
+          vy:      -0.08 - Math.random() * 0.22,
           opacity: 0.15 + Math.random() * 0.55,
-          phase:  Math.random() * Math.PI * 2,
-          wobble: 0.003 + Math.random() * 0.008,
+          phase:   Math.random() * Math.PI * 2,
+          wobble:  0.003 + Math.random() * 0.008,
         });
       }
     }
@@ -1297,10 +1272,9 @@
         p.phase += p.wobble;
         p.x += p.vx + Math.sin(p.phase) * 0.18;
         p.y += p.vy;
-        // Wrap vertically
         if (p.y < -6) {
-          p.y  = PH + 6;
-          p.x  = Math.random() * PW;
+          p.y = PH + 6;
+          p.x = Math.random() * PW;
         }
         pc.beginPath();
         pc.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -1314,7 +1288,6 @@
     initParticles();
     drawParticles();
 
-    // Handle resize
     window.addEventListener('resize', () => {
       resizeTopo();
       resizeParticles();
@@ -1339,7 +1312,6 @@
 
     revealEls.forEach(el => revealObserver.observe(el));
 
-    // Trigger hero elements immediately
     requestAnimationFrame(() => {
       document.querySelectorAll('#hero .reveal').forEach((el, i) => {
         setTimeout(() => el.classList.add('visible'), i * 100);
@@ -1347,7 +1319,7 @@
     });
 
 
-    /* ── 5. Nav: add backdrop blur once scrolled ── */
+    /* ── 5. Nav: backdrop blur on scroll ── */
     const navEl = document.querySelector('nav');
     const scrollWatcher = new IntersectionObserver(
       ([entry]) => navEl.style.backdropFilter = entry.isIntersecting ? '' : 'blur(12px)',
