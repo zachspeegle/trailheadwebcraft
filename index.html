@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trailhead WebCraft — Web Design &amp; Development Studio</title>
+  <meta name="description" content="Trailhead WebCraft builds intentional websites, brand identities, and digital paths for businesses that deserve to be found. Based in Sevier County, TN.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    /* ─────────────────────────────────────────
+       RESET & CUSTOM PROPERTIES
+    ───────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg:          #0a0e07;
+      --bg-surface:  #0f1409;
+      --bg-card:     #141c0d;
+      --bg-card-hover: #1a2412;
+      --text:        #e2d9c4;
+      --text-muted:  #7a8870;
+      --text-faint:  #4a5540;
+      --accent:      #c8860a;
+      --accent-light:#e09c1a;
+      --accent-glow: rgba(200, 134, 10, 0.18);
+      --moss:        #3a5830;
+      --moss-light:  #527046;
+      --border:      rgba(90, 115, 70, 0.14);
+      --border-mid:  rgba(90, 115, 70, 0.22);
+      --border-accent: rgba(200, 134, 10, 0.28);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+      cursor: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ─────────────────────────────────────────
+       CUSTOM CURSOR
+    ───────────────────────────────────────── */
+    .cursor-dot {
+      position: fixed;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      box-shadow:
+        0 0 8px 3px rgba(200, 134, 10, 0.5),
+        0 0 22px 8px rgba(200, 134, 10, 0.18);
+      transition: width 0.15s ease, height 0.15s ease;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(200, 134, 10, 0.3);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
+    }
+
+    .cursor-dot.is-hovering {
+      width: 14px;
+      height: 14px;
+    }
+
+    .cursor-ring.is-hovering {
+      width: 52px;
+      height: 52px;
+      border-color: rgba(200, 134, 10, 0.5);
+    }
+
+    /* ─────────────────────────────────────────
+       ATMOSPHERIC BACKGROUND
+    ───────────────────────────────────────── */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    #topo-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.065;
+    }
+
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.22;
+    }
+
+    /* Organic grain overlay */
+    .grain-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.032;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    /* ─────────────────────────────────────────
+       GLOBAL LAYOUT
+    ───────────────────────────────────────── */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+
+    section {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ─────────────────────────────────────────
+       SCROLL REVEAL
+    ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal.d1 { transition-delay: 0.08s; }
+    .reveal.d2 { transition-delay: 0.16s; }
+    .reveal.d3 { transition-delay: 0.24s; }
+    .reveal.d4 { transition-delay: 0.32s; }
+
+    /* ─────────────────────────────────────────
+       NAVIGATION
+    ───────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.6rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(10, 14, 7, 0.88) 0%, transparent 100%);
+    }
+
+    .nav-wordmark {
+      font-family: 'Fraunces', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    .nav-wordmark .dot {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta-link {
+      border: 1px solid var(--border-accent) !important;
+      color: var(--accent) !important;
+      padding: 0.45rem 1.1rem;
+      border-radius: 2px;
+      transition: background 0.2s ease, color 0.2s ease !important;
+    }
+
+    .nav-cta-link:hover {
+      background: var(--accent-glow) !important;
+    }
+
+    /* ─────────────────────────────────────────
+       BUTTONS
+    ───────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 0.9rem 2.1rem;
+      border-radius: 2px;
+      border: none;
+      cursor: none;
+      transition: transform 0.2s ease, background 0.2s ease,
+                  border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-fill {
+      background: var(--accent);
+      color: #0a0e07;
+      font-weight: 700;
+    }
+
+    .btn-fill:hover {
+      background: var(--accent-light);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border-mid);
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(200, 134, 10, 0.45);
+      color: var(--accent);
+    }
+
+    /* ─────────────────────────────────────────
+       SECTION LABELS & HEADINGS
+    ───────────────────────────────────────── */
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.1rem;
+    }
+
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.55;
+      flex-shrink: 0;
+    }
+
+    .display-heading {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 0.95;
+    }
+
+    .display-heading em,
+    .section-heading em {
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 300;
+    }
+
+    .section-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+      line-height: 1.1;
+    }
+
+    /* ─────────────────────────────────────────
+       ① HERO
+    ───────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 9rem 2.5rem 5rem;
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-title {
+      font-size: clamp(4rem, 9.5vw, 9.5rem);
+      margin-bottom: 0.08em;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 1.8rem 0 3.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-tagline strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.55rem;
+      opacity: 0.35;
+      z-index: 2;
+    }
+
+    .hero-scroll span {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .scroll-rod {
+      width: 1px;
+      height: 44px;
+      background: linear-gradient(to bottom, var(--text-muted), transparent);
+      animation: rodPulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes rodPulse {
+      0%, 100% { opacity: 0.5; transform: scaleY(1); }
+      50%       { opacity: 1;   transform: scaleY(1.15); }
+    }
+
+    /* ─────────────────────────────────────────
+       ② MARQUEE STRIP
+    ───────────────────────────────────────── */
+    .marquee-section {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 50s linear infinite;
+      padding: 1.15rem 0;
+    }
+
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      padding: 0 1.75rem;
+      white-space: nowrap;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .marquee-item .pip {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      opacity: 0.65;
+    }
+
+    .marquee-item .hl {
+      color: var(--accent);
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─────────────────────────────────────────
+       ③ SERVICES
+    ───────────────────────────────────────── */
+    #services {
+      padding: 7.5rem 2.5rem;
+    }
+
+    .services-header {
+      max-width: 1180px;
+      margin: 0 auto 4rem;
+    }
+
+    .services-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .service-card {
+      background: var(--bg-card);
+      padding: 2.75rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+
+    /* Warm sweep on hover — bottom border */
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .service-card:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .service-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .service-icon {
+      width: 46px;
+      height: 46px;
+      color: var(--accent);
+      margin-bottom: 1.75rem;
+      opacity: 0.82;
+    }
+
+    .service-name {
+      font-family: 'Fraunces', serif;
+      font-size: 1.55rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.85rem;
+    }
+
+    .service-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-bottom: 1.75rem;
+    }
+
+    .service-tags {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    /* ─────────────────────────────────────────
+       ④ ABOUT
+    ───────────────────────────────────────── */
+    #about {
+      padding: 7.5rem 2.5rem;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .about-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .about-body {
+      font-size: 0.94rem;
+      color: var(--text-muted);
+      line-height: 1.82;
+    }
+
+    .about-body p + p {
+      margin-top: 1.2rem;
+    }
+
+    .about-body strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .about-heading {
+      margin-bottom: 1.75rem;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 2.75rem;
+      margin-top: 2.75rem;
+      padding-top: 2.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat-val {
+      display: block;
+      font-family: 'Fraunces', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── Field Notes Panel ── */
+    .field-notes {
+      border: 1px solid var(--border-mid);
+      border-left: 2px solid var(--accent);
+      background: #0c1108;
+      padding: 2.1rem 2.25rem 2.1rem 2.4rem;
+      font-family: 'Space Mono', monospace;
+      position: relative;
+    }
+
+    .field-notes-label {
+      position: absolute;
+      top: -0.62rem;
+      left: 1.4rem;
+      background: var(--bg-surface);
+      padding: 0 0.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .fn-row {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 0.79rem;
+      line-height: 1.45;
+      margin-bottom: 0.38rem;
+    }
+
+    .fn-key {
+      color: var(--text-faint);
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    .fn-val {
+      color: var(--text);
+    }
+
+    .fn-val.amber {
+      color: var(--accent);
+    }
+
+    .fn-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 1.3rem 0;
+    }
+
+    .fn-check-list {
+      font-size: 0.77rem;
+      line-height: 2;
+    }
+
+    .fn-check-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .fn-check-mark {
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .cursor-blink {
+      display: inline-block;
+      width: 0.48em;
+      height: 0.88em;
+      background: var(--accent);
+      opacity: 0.7;
+      vertical-align: text-bottom;
+      margin-left: 0.12em;
+      animation: blink 1.15s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* ─────────────────────────────────────────
+       ⑤ CTA BAND
+    ───────────────────────────────────────── */
+    #cta {
+      padding: 8rem 2.5rem;
+      text-align: center;
+      position: relative;
+      border-top: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    #cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse at center,
+        rgba(200, 134, 10, 0.07) 0%,
+        rgba(58, 88, 48, 0.04) 45%,
+        transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-headline {
+      font-size: clamp(2.4rem, 5.5vw, 5rem);
+      margin-bottom: 1.2rem;
+    }
+
+    .cta-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 440px;
+      margin: 0 auto 3.25rem;
+      line-height: 1.7;
+    }
+
+    /* ─────────────────────────────────────────
+       ⑥ FOOTER
+    ───────────────────────────────────────── */
+    footer {
+      padding: 2.75rem 2.5rem;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-row {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-brand {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .footer-brand .dot { color: var(--accent); }
+
+    .footer-brand small {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-top: 0.2rem;
+      font-weight: 400;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-nav a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .footer-nav a:hover {
+      color: var(--accent);
+    }
+
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.07em;
+      color: var(--text-faint);
+    }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+      }
+    }
+
+    @media (max-width: 680px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 7.5rem 1.5rem 5rem; }
+      .hero-title { font-size: clamp(3.2rem, 14vw, 6rem); }
+      #services { padding: 5.5rem 1.5rem; }
+      .services-header { margin-bottom: 2.5rem; }
+      #about { padding: 5.5rem 1.5rem; }
+      .about-stats { gap: 2rem; }
+      #cta { padding: 6rem 1.5rem; }
+      footer { padding: 2.25rem 1.5rem; }
+      .footer-row { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+      .footer-nav { flex-wrap: wrap; gap: 1.25rem; }
+    }
+
+    /* Hide cursor on touch devices */
+    @media (pointer: coarse) {
+      .cursor-dot, .cursor-ring { display: none; }
+      body { cursor: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Custom Cursor ── -->
+  <div class="cursor-dot"  id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ── Atmospheric Background ── -->
+  <canvas id="topo-canvas" aria-hidden="true"></canvas>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- ─────────────────────────────────────────
+       NAVIGATION
+  ───────────────────────────────────────── -->
+  <nav aria-label="Main navigation">
+    <a href="/" class="nav-wordmark">Trailhead<span class="dot">.</span></a>
+    <ul class="nav-links" role="list">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#cta" class="nav-cta-link">Start a Project</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─────────────────────────────────────────
+       ① HERO
+  ───────────────────────────────────────── -->
+  <section id="hero" aria-label="Hero">
+    <div class="hero-inner">
+      <p class="eyebrow reveal">
+        Web Design &nbsp;·&nbsp; Development &nbsp;·&nbsp; Brand Identity
+      </p>
+      <h1 class="display-heading hero-title reveal d1">
+        Trailhead<br><em>WebCraft</em>
+      </h1>
+      <p class="hero-tagline reveal d2">
+        <strong>Every great journey starts where the path becomes clear.</strong>
+        We build the digital routes your customers follow — and the destinations worth arriving at.
+      </p>
+      <div class="hero-actions reveal d3">
+        <a href="#services" class="btn btn-fill">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          See Our Work
+        </a>
+        <a href="#cta" class="btn btn-outline">Start a Project</a>
+      </div>
+    </div>
+    <div class="hero-scroll" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-rod"></div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────
+       ② MARQUEE STRIP
+  ───────────────────────────────────────── -->
+  <div class="marquee-section" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack">
+      <div class="marquee-item"><span class="pip"></span>Handcrafted for the journey ahead</div>
+      <div class="marquee-item"><span class="pip"></span><span class="hl">Every site is a summit</span></div>
+      <div class="marquee-item"><span class="pip"></span>Rooted in craft &nbsp;·&nbsp; Built to last</div>
+      <div class="marquee-item"><span class="pip"></span>No shortcuts. No compromises.</div>
+      <div class="marquee-item"><span class="pip"></span><span class="hl">Where design meets the tree line</span></div>
+      <div class="marquee-item"><span class="pip"></span>Trails worn by intention</div>
+      <div class="marquee-item"><span class="pip"></span>Find your trailhead</div>
+      <div class="marquee-item"><span class="pip"></span><span class="hl">Built to outlast the seasons</span></div>
+      <div class="marquee-item"><span class="pip"></span>Cartography of your brand</div>
+      <div class="marquee-item"><span class="pip"></span>Wilderness-grade craft</div>
+      <div class="marquee-item"><span class="pip"></span><span class="hl">The path forward, made clear</span></div>
+      <!-- duplicated for seamless loop -->
+      <div class="marquee-item"><span class="pip"></span>Handcrafted for the journey ahead</div>
+      <div class="marquee-item"><span class="pip"></span><span class="hl">Every site is a summit</span></div>
+      <div class="marquee-item"><span class="pip"></span>Rooted in craft &nbsp;·&nbsp; Built to last</div>
+      <div class="marquee-item"><span class="pip"></span>No shortcuts. No compromises.</div>
+      <div class="marquee-item"><span class="pip"></span><span class="hl">Where design meets the tree line</span></div>
+      <div class="marquee-item"><span class="pip"></span>Trails worn by intention</div>
+      <div class="marquee-item"><span class="pip"></span>Find your trailhead</div>
+      <div class="marquee-item"><span class="pip"></span><span class="hl">Built to outlast the seasons</span></div>
+      <div class="marquee-item"><span class="pip"></span>Cartography of your brand</div>
+      <div class="marquee-item"><span class="pip"></span>Wilderness-grade craft</div>
+      <div class="marquee-item"><span class="pip"></span><span class="hl">The path forward, made clear</span></div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       ③ SERVICES
+  ───────────────────────────────────────── -->
+  <section id="services">
+    <div class="services-header">
+      <div class="reveal">
+        <p class="eyebrow">What we build</p>
+        <h2 class="section-heading">Three paths.<br><em>One destination.</em></h2>
+      </div>
+    </div>
+
+    <div class="services-grid">
+
+      <!-- Web Design -->
+      <div class="service-card reveal">
+        <!-- Tree / branching growth icon -->
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none"
+             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <line x1="24" y1="40" x2="24" y2="22" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M24 22 C24 22 14 19 10 10 C17 10 22 15 24 22Z"
+                stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"
+                fill="currentColor" fill-opacity="0.08"/>
+          <path d="M24 22 C24 22 34 19 38 10 C31 10 26 15 24 22Z"
+                stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"
+                fill="currentColor" fill-opacity="0.08"/>
+          <path d="M24 30 C24 30 17 27.5 14 21 C19.5 21 23 25 24 30Z"
+                stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"
+                fill="currentColor" fill-opacity="0.06"/>
+          <path d="M24 30 C24 30 31 27.5 34 21 C28.5 21 25 25 24 30Z"
+                stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"
+                fill="currentColor" fill-opacity="0.06"/>
+          <rect x="21" y="39" width="6" height="2.5" rx="1.25"
+                fill="currentColor" opacity="0.35"/>
+        </svg>
+        <h3 class="service-name">Web Design</h3>
+        <p class="service-desc">
+          Intentional, hand-crafted digital environments where every element is placed with purpose.
+          We design experiences that feel as considered as the landscape they inhabit — no templates,
+          no shortcuts, no shortcuts.
+        </p>
+        <p class="service-tags">Design &nbsp;·&nbsp; UX &nbsp;·&nbsp; Visual Systems</p>
+      </div>
+
+      <!-- Web Development -->
+      <div class="service-card reveal d1">
+        <!-- Trail / elevation path icon -->
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none"
+             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M5 38 C9 30, 13 34, 17.5 25.5 C22 17 26.5 21 31 13.5 C35.5 6, 39.5 10, 43 7"
+                stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round"/>
+          <circle cx="17.5" cy="25.5" r="2.2" fill="currentColor" opacity="0.45"/>
+          <circle cx="31"   cy="13.5" r="2.2" fill="currentColor" opacity="0.45"/>
+          <circle cx="43"   cy="7"    r="1.5" fill="currentColor" opacity="0.65"/>
+          <line x1="4" y1="39" x2="44" y2="39"
+                stroke="currentColor" stroke-width="0.8" stroke-dasharray="3 5"
+                opacity="0.2" stroke-linecap="round"/>
+        </svg>
+        <h3 class="service-name">Web Development</h3>
+        <p class="service-desc">
+          Solid, enduring foundations beneath every pixel. Code built to perform across all terrain —
+          fast, accessible, and resilient, like a well-maintained trail through difficult country.
+        </p>
+        <p class="service-tags">Frontend &nbsp;·&nbsp; CMS &nbsp;·&nbsp; Performance</p>
+      </div>
+
+      <!-- Brand Identity -->
+      <div class="service-card reveal d2">
+        <!-- Compass rose icon -->
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none"
+             xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="17" stroke="currentColor"
+                  stroke-width="1.4" opacity="0.22"/>
+          <circle cx="24" cy="24" r="10" stroke="currentColor"
+                  stroke-width="0.8" stroke-dasharray="2.5 4.5"
+                  opacity="0.2"/>
+          <circle cx="24" cy="24" r="2.8" fill="currentColor" opacity="0.65"/>
+          <!-- N needle -->
+          <path d="M24 13 L26.2 22.5 L24 24.5 L21.8 22.5 Z"
+                fill="currentColor"/>
+          <!-- S needle -->
+          <path d="M24 35 L21.8 25.5 L24 23.5 L26.2 25.5 Z"
+                fill="currentColor" opacity="0.35"/>
+          <!-- E needle -->
+          <path d="M35 24 L25.5 21.8 L23.5 24 L25.5 26.2 Z"
+                fill="currentColor" opacity="0.55"/>
+          <!-- W needle -->
+          <path d="M13 24 L22.5 26.2 L24.5 24 L22.5 21.8 Z"
+                fill="currentColor" opacity="0.3"/>
+          <line x1="24" y1="7"  x2="24" y2="10" stroke="currentColor"
+                stroke-width="1.2" stroke-linecap="round" opacity="0.35"/>
+          <line x1="24" y1="38" x2="24" y2="41" stroke="currentColor"
+                stroke-width="1.2" stroke-linecap="round" opacity="0.35"/>
+          <line x1="7"  y1="24" x2="10" y2="24" stroke="currentColor"
+                stroke-width="1.2" stroke-linecap="round" opacity="0.35"/>
+          <line x1="38" y1="24" x2="41" y2="24" stroke="currentColor"
+                stroke-width="1.2" stroke-linecap="round" opacity="0.35"/>
+        </svg>
+        <h3 class="service-name">Brand Identity</h3>
+        <p class="service-desc">
+          Your compass in the marketplace. We build identities that orient customers toward your business —
+          clear, consistent, and unmistakable from any vantage point on the map.
+        </p>
+        <p class="service-tags">Logo &nbsp;·&nbsp; Identity &nbsp;·&nbsp; Style Systems</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────
+       ④ ABOUT
+  ───────────────────────────────────────── -->
+  <section id="about">
+    <div class="about-grid">
+
+      <!-- Left: narrative -->
+      <div>
+        <p class="eyebrow reveal">About Trailhead</p>
+        <h2 class="section-heading about-heading reveal d1">
+          Built by someone<br>who <em>knows the terrain.</em>
+        </h2>
+        <div class="about-body reveal d2">
+          <p>
+            The businesses tourists find aren't always the best ones. <strong>They're the most
+            visible ones.</strong> I started Trailhead WebCraft because the restaurants, cabins,
+            shops, and attractions that make Sevier County worth visiting deserve to be found.
+          </p>
+          <p>
+            As a retired Naval Officer with an MBA, I've built high-pressure systems that have
+            to work. That same discipline — precise, methodical, no-excuse execution — is what
+            I bring to every website, every brand, every project. <strong>No vague promises.
+            No confusing jargon. No agency bloat.</strong>
+          </p>
+          <p>
+            Every engagement starts with a clear read of the terrain, a plan that fits the
+            conditions, and craft that holds up when the season gets busy.
+          </p>
+        </div>
+        <div class="about-stats reveal d3">
+          <div>
+            <span class="stat-val">11M</span>
+            <span class="stat-label">Tourists pass through<br>Sevier County each year</span>
+          </div>
+          <div>
+            <span class="stat-val">100%</span>
+            <span class="stat-label">Focused on local<br>tourism businesses</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: field notes panel -->
+      <div class="reveal d2">
+        <div class="field-notes">
+          <span class="field-notes-label">Field Notes</span>
+          <div class="fn-row">
+            <span class="fn-key">EXPEDITION</span>
+            <span class="fn-val">Trailhead WebCraft</span>
+          </div>
+          <div class="fn-row">
+            <span class="fn-key">OPERATOR</span>
+            <span class="fn-val">Zach — Sevier County, TN</span>
+          </div>
+          <div class="fn-row">
+            <span class="fn-key">TERRAIN</span>
+            <span class="fn-val">Web · Brand · Local Search</span>
+          </div>
+          <div class="fn-row">
+            <span class="fn-key">SERVICE AREA</span>
+            <span class="fn-val amber">Gatlinburg · Pigeon Forge · Sevierville</span>
+          </div>
+          <div class="fn-row">
+            <span class="fn-key">STATUS</span>
+            <span class="fn-val amber">Active season</span>
+          </div>
+          <hr class="fn-divider">
+          <div class="fn-check-list">
+            <div class="fn-check-item">
+              <span class="fn-check-mark">[✓]</span> Intentional design, no templates
+            </div>
+            <div class="fn-check-item">
+              <span class="fn-check-mark">[✓]</span> Honest communication, always
+            </div>
+            <div class="fn-check-item">
+              <span class="fn-check-mark">[✓]</span> Clean, performant code
+            </div>
+            <div class="fn-check-item">
+              <span class="fn-check-mark">[✓]</span> Local roots, real context
+            </div>
+            <div class="fn-check-item">
+              <span class="fn-check-mark">[✓]</span> No agency overhead or bloat
+            </div>
+          </div>
+          <hr class="fn-divider">
+          <div class="fn-row">
+            <span class="fn-key">LAST ENTRY</span>
+            <span class="fn-val">Building something worth finding<span class="cursor-blink"></span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────
+       ⑤ CTA BAND
+  ───────────────────────────────────────── -->
+  <section id="cta">
+    <div class="cta-content">
+      <h2 class="display-heading cta-headline reveal">
+        Every great journey<br>needs a <em>trailhead.</em>
+      </h2>
+      <p class="cta-sub reveal d1">
+        You know where you want to go. We'll help you map the route and build the path
+        that gets you there.
+      </p>
+      <div class="reveal d2">
+        <a href="tel:8652176804" class="btn btn-fill">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M4.5 1.5S3 1 2 3s.5 4 3 6 4 4 6 3 1.5-2.5 1.5-2.5L11 8l-2-1-1 1c-.5.5-1.5 0-3-1.5S3.5 4 4 3.5L5 2.5 4 1l-.5.5z"
+              stroke="currentColor" stroke-width="1.3" stroke-linecap="round"
+              stroke-linejoin="round"/>
+          </svg>
+          Find Your Trailhead
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────
+       ⑥ FOOTER
+  ───────────────────────────────────────── -->
+  <footer>
+    <div class="footer-row">
+      <div class="footer-brand">
+        Trailhead<span class="dot">.</span>
+        <small>WebCraft — Sevier County, TN</small>
+      </div>
+      <ul class="footer-nav" role="list">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="tel:8652176804">865-217-6804</a></li>
+      </ul>
+      <p class="footer-copy">© 2026 Trailhead WebCraft · All rights reserved</p>
+    </div>
+  </footer>
+
+  <!-- ─────────────────────────────────────────
+       SCRIPTS
+  ───────────────────────────────────────── -->
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── 1. Custom Cursor ── */
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx = window.innerWidth  / 2;
+    let my = window.innerHeight / 2;
+    let rx = mx, ry = my;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX;
+      my = e.clientY;
+      dot.style.left = mx + 'px';
+      dot.style.top  = my + 'px';
+    });
+
+    // Hover state on interactive elements
+    const hoverEls = document.querySelectorAll('a, button, .service-card');
+    hoverEls.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        dot.classList.add('is-hovering');
+        ring.classList.add('is-hovering');
+      });
+      el.addEventListener('mouseleave', () => {
+        dot.classList.remove('is-hovering');
+        ring.classList.remove('is-hovering');
+      });
+    });
+
+    // Ring follows with inertia
+    (function animateRing() {
+      rx += (mx - rx) * 0.1;
+      ry += (my - ry) * 0.1;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+
+    /* ── 2. Topographic Contour Canvas ── */
+    const topoCanvas = document.getElementById('topo-canvas');
+    const tc = topoCanvas.getContext('2d');
+    let TW, TH;
+
+    const centers = [
+      { fx: 0.22, fy: 0.38, startR: 55, step: 52, speed: 0.00025, stretch: 0.58 },
+      { fx: 0.78, fy: 0.70, startR: 70, step: 58, speed: 0.00018, stretch: 0.62 },
+      { fx: 0.55, fy: 0.12, startR: 45, step: 48, speed: 0.0003,  stretch: 0.5  },
+    ];
+
+    function resizeTopo() {
+      TW = topoCanvas.width  = window.innerWidth;
+      TH = topoCanvas.height = window.innerHeight;
+    }
+
+    let topoTime = 0;
+    function drawTopo() {
+      tc.clearRect(0, 0, TW, TH);
+      topoTime += 0.007;
+
+      centers.forEach((c, ci) => {
+        const cx = TW * c.fx;
+        const cy = TH * c.fy;
+        const maxR = Math.hypot(TW, TH) * 0.65;
+
+        for (let r = c.startR; r < maxR; r += c.step) {
+          tc.beginPath();
+          const steps = 120;
+          for (let i = 0; i <= steps; i++) {
+            const a = (i / steps) * Math.PI * 2;
+            const n1 = Math.sin(a * 2.8 + topoTime * 0.9 + ci * 1.4) * 14;
+            const n2 = Math.sin(a * 5.5 - topoTime * 0.5 + ci * 2.1) * 7;
+            const n3 = Math.cos(a * 9   + topoTime * 1.2 + ci * 0.7) * 4;
+            const nr = r + n1 + n2 + n3;
+            const x  = cx + Math.cos(a) * nr;
+            const y  = cy + Math.sin(a) * (nr * c.stretch);
+            i === 0 ? tc.moveTo(x, y) : tc.lineTo(x, y);
+          }
+          tc.closePath();
+          // Slightly dimmer on outer rings
+          const alpha = 0.55 * (1 - (r / maxR) * 0.6);
+          tc.strokeStyle = `rgba(78, 110, 62, ${alpha})`;
+          tc.lineWidth = 0.7;
+          tc.stroke();
+        }
+      });
+
+      requestAnimationFrame(drawTopo);
+    }
+
+    resizeTopo();
+    drawTopo();
+
+
+    /* ── 3. Floating Spore / Pollen Particles ── */
+    const pCanvas = document.getElementById('particle-canvas');
+    const pc = pCanvas.getContext('2d');
+    let PW, PH;
+    let particles = [];
+
+    function resizeParticles() {
+      PW = pCanvas.width  = window.innerWidth;
+      PH = pCanvas.height = window.innerHeight;
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.min(70, Math.floor((PW * PH) / 18000));
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x:      Math.random() * PW,
+          y:      Math.random() * PH,
+          r:      0.7 + Math.random() * 1.8,
+          vx:     (Math.random() - 0.5) * 0.25,
+          vy:     -0.08 - Math.random() * 0.22,
+          opacity: 0.15 + Math.random() * 0.55,
+          phase:  Math.random() * Math.PI * 2,
+          wobble: 0.003 + Math.random() * 0.008,
+        });
+      }
+    }
+
+    function drawParticles() {
+      pc.clearRect(0, 0, PW, PH);
+      particles.forEach(p => {
+        p.phase += p.wobble;
+        p.x += p.vx + Math.sin(p.phase) * 0.18;
+        p.y += p.vy;
+        // Wrap vertically
+        if (p.y < -6) {
+          p.y  = PH + 6;
+          p.x  = Math.random() * PW;
+        }
+        pc.beginPath();
+        pc.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        pc.fillStyle = `rgba(200, 134, 10, ${p.opacity})`;
+        pc.fill();
+      });
+      requestAnimationFrame(drawParticles);
+    }
+
+    resizeParticles();
+    initParticles();
+    drawParticles();
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+      resizeTopo();
+      resizeParticles();
+      initParticles();
+    });
+
+
+    /* ── 4. Scroll Reveal (IntersectionObserver) ── */
+    const revealEls = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold:  0.1,
+      rootMargin: '0px 0px -40px 0px',
+    });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // Trigger hero elements immediately
+    requestAnimationFrame(() => {
+      document.querySelectorAll('#hero .reveal').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 100);
+      });
+    });
+
+
+    /* ── 5. Nav: add backdrop blur once scrolled ── */
+    const navEl = document.querySelector('nav');
+    const scrollWatcher = new IntersectionObserver(
+      ([entry]) => navEl.style.backdropFilter = entry.isIntersecting ? '' : 'blur(12px)',
+      { rootMargin: '-80px 0px 0px 0px' }
+    );
+    scrollWatcher.observe(document.getElementById('hero'));
+
+  })();
+  </script>
+
+</body>
+</html>
