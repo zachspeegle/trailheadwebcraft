@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Start a Project — Trailhead WebCraft</title>
+  <meta name="description" content="Get in touch with Trailhead WebCraft. Tell us about your business and we'll find the right path forward together.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:            #0a0e07;
+      --bg-surface:    #0f1409;
+      --bg-card:       #141c0d;
+      --text:          #e2d9c4;
+      --text-muted:    #7a8870;
+      --text-faint:    #4a5540;
+      --accent:        #c8860a;
+      --accent-light:  #e09c1a;
+      --accent-glow:   rgba(200, 134, 10, 0.18);
+      --border:        rgba(90, 115, 70, 0.14);
+      --border-mid:    rgba(90, 115, 70, 0.22);
+      --border-accent: rgba(200, 134, 10, 0.28);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+      cursor: none;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Custom Cursor ── */
+    .cursor-dot {
+      position: fixed; width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent); pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px 3px rgba(200,134,10,0.5), 0 0 22px 8px rgba(200,134,10,0.18);
+      transition: width 0.15s ease, height 0.15s ease;
+    }
+    .cursor-ring {
+      position: fixed; width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid rgba(200,134,10,0.3); pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
+    }
+    .cursor-dot.is-hovering  { width: 14px; height: 14px; }
+    .cursor-ring.is-hovering { width: 52px; height: 52px; border-color: rgba(200,134,10,0.5); }
+
+    /* ── Background ── */
+    #topo-canvas, #particle-canvas {
+      position: fixed; inset: 0; pointer-events: none;
+    }
+    #topo-canvas     { z-index: 0; opacity: 0.05; }
+    #particle-canvas { z-index: 0; opacity: 0.18; }
+    .grain-overlay {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.6rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(180deg, rgba(10,14,7,0.88) 0%, transparent 100%);
+    }
+    .nav-wordmark {
+      font-family: 'Fraunces', serif; font-size: 1.05rem;
+      font-weight: 600; letter-spacing: -0.01em; color: var(--text);
+    }
+    .nav-wordmark .dot { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 2.25rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); transition: color 0.2s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-active { color: var(--accent) !important; }
+
+    /* ── Layout ── */
+    section { position: relative; z-index: 2; }
+
+    /* ── Scroll Reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(26px);
+      transition: opacity 0.75s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.75s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal.d1 { transition-delay: 0.08s; }
+    .reveal.d2 { transition-delay: 0.16s; }
+    .reveal.d3 { transition-delay: 0.24s; }
+
+    /* ── Eyebrow ── */
+    .eyebrow {
+      display: flex; align-items: center; gap: 0.7rem;
+      font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.1rem;
+    }
+    .eyebrow::before {
+      content: ''; display: block; width: 24px; height: 1px;
+      background: var(--accent); opacity: 0.55; flex-shrink: 0;
+    }
+
+    /* ── Page wrapper ── */
+    .page-wrapper {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 9rem 2.5rem 6rem;
+    }
+
+    .contact-grid {
+      max-width: 1080px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1fr 1.35fr; gap: 6rem; align-items: start;
+    }
+
+    /* ── Left: info panel ── */
+    .contact-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 700; letter-spacing: -0.025em; line-height: 0.97;
+      margin-bottom: 1.6rem;
+    }
+    .contact-heading em { font-style: italic; color: var(--accent); font-weight: 300; }
+
+    .contact-intro {
+      font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;
+      margin-bottom: 2.75rem;
+    }
+    .contact-intro strong { color: var(--text); font-weight: 400; }
+
+    .contact-details {
+      display: flex; flex-direction: column; gap: 1.1rem;
+      border-top: 1px solid var(--border); padding-top: 2rem;
+    }
+    .contact-detail-row {
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .cd-label {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-faint); width: 80px; flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .cd-value {
+      font-size: 0.9rem; color: var(--text-muted);
+    }
+    .cd-value a { color: var(--accent); transition: color 0.2s ease; }
+    .cd-value a:hover { color: var(--accent-light); }
+
+    /* ── Right: form ── */
+    .contact-form-wrap {
+      background: #0c1108;
+      border: 1px solid var(--border-mid);
+      border-top: 2px solid var(--accent);
+      padding: 2.5rem 2.75rem;
+    }
+
+    .form-label-tag {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 2rem;
+    }
+
+    .form-field {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-field label {
+      display: block;
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-faint); margin-bottom: 0.55rem;
+    }
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border-mid);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 300;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      -webkit-appearance: none;
+    }
+
+    .form-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8870' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: none;
+    }
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--border-accent);
+      box-shadow: 0 0 0 3px rgba(200, 134, 10, 0.08);
+    }
+
+    .form-field input::placeholder,
+    .form-field textarea::placeholder {
+      color: var(--text-faint);
+    }
+
+    .form-field textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+
+    .btn-submit {
+      width: 100%;
+      display: flex; align-items: center; justify-content: center; gap: 0.65rem;
+      background: var(--accent); color: #0a0e07;
+      font-family: 'Space Mono', monospace; font-size: 0.78rem;
+      font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase;
+      padding: 1rem 2rem; border: none; border-radius: 2px;
+      cursor: none; margin-top: 0.5rem;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .btn-submit:hover {
+      background: var(--accent-light);
+      transform: translateY(-1px);
+    }
+
+    .form-note {
+      margin-top: 1rem;
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-faint); text-align: center;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 2.75rem 2.5rem;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      position: relative; z-index: 2;
+    }
+    .footer-row {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-brand { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; }
+    .footer-brand .dot { color: var(--accent); }
+    .footer-brand small {
+      display: block; font-family: 'Space Mono', monospace;
+      font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-faint); margin-top: 0.2rem; font-weight: 400;
+    }
+    .footer-nav { display: flex; gap: 2rem; list-style: none; }
+    .footer-nav a {
+      font-family: 'Space Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); transition: color 0.2s ease;
+    }
+    .footer-nav a:hover { color: var(--accent); }
+    .footer-copy {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.07em; color: var(--text-faint);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .contact-grid { grid-template-columns: 1fr; gap: 3.5rem; }
+    }
+    @media (max-width: 580px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { display: none; }
+      .page-wrapper { padding: 7.5rem 1.5rem 5rem; }
+      .contact-form-wrap { padding: 2rem 1.75rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { padding: 2.25rem 1.5rem; }
+      .footer-row { flex-direction: column; align-items: flex-start; }
+    }
+    @media (pointer: coarse) {
+      .cursor-dot, .cursor-ring { display: none; }
+      body { cursor: auto; }
+      .form-field select { cursor: pointer; }
+      .btn-submit { cursor: pointer; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"  id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <canvas id="topo-canvas"     aria-hidden="true"></canvas>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="grain-overlay"   aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="nav-wordmark">Trailhead<span class="dot">.</span></a>
+    <ul class="nav-links" role="list">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="bca.html">Base Camp Assessment</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="contact.html" class="nav-active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main -->
+  <main>
+    <section class="page-wrapper">
+      <div class="contact-grid">
+
+        <!-- Left: context -->
+        <div>
+          <p class="eyebrow reveal">Get in touch</p>
+          <h1 class="contact-heading reveal d1">
+            Let's find<br>your <em>trailhead.</em>
+          </h1>
+          <p class="contact-intro reveal d2">
+            Tell us a bit about your business and what you're trying to accomplish.
+            <strong>No pressure, no pitch.</strong> The first conversation is just about
+            figuring out whether we're the right fit and what the right next step looks like.
+          </p>
+
+          <div class="contact-details reveal d3">
+            <div class="contact-detail-row">
+              <span class="cd-label">Phone</span>
+              <span class="cd-value"><a href="tel:8652176804">865-217-6804</a></span>
+            </div>
+            <div class="contact-detail-row">
+              <span class="cd-label">Hours</span>
+              <span class="cd-value">Mon – Fri, 9 AM – 5 PM ET</span>
+            </div>
+            <div class="contact-detail-row">
+              <span class="cd-label">Location</span>
+              <span class="cd-value">Sevier County, TN</span>
+            </div>
+            <div class="contact-detail-row">
+              <span class="cd-label">Serving</span>
+              <span class="cd-value">Gatlinburg · Pigeon Forge · Sevierville</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="reveal d2">
+          <div class="contact-form-wrap">
+            <p class="form-label-tag">Start the conversation</p>
+            <form name="contact" method="POST" action="#" data-netlify="true">
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="name">Your name</label>
+                  <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+                </div>
+                <div class="form-field">
+                  <label for="business">Business name</label>
+                  <input type="text" id="business" name="business" placeholder="The Ridgeline Inn">
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" placeholder="you@yourbusiness.com" required>
+              </div>
+              <div class="form-field">
+                <label for="phone">Phone (optional)</label>
+                <input type="tel" id="phone" name="phone" placeholder="865-000-0000">
+              </div>
+              <div class="form-field">
+                <label for="interest">What are you interested in?</label>
+                <select id="interest" name="interest">
+                  <option value="" disabled selected>Select one</option>
+                  <option value="bca">Base Camp Assessment ($349)</option>
+                  <option value="map">The Map — Ongoing SEO ($397/mo)</option>
+                  <option value="guide">The Guide — Full-Service SEO ($897/mo)</option>
+                  <option value="web-design">Web Design</option>
+                  <option value="brand">Brand Identity</option>
+                  <option value="not-sure">Not sure yet — just exploring</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="message">Anything else we should know?</label>
+                <textarea id="message" name="message"
+                  placeholder="Tell us about your business, what's not working, or any questions you have..."></textarea>
+              </div>
+              <button type="submit" class="btn-submit">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+                  <path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Send Message
+              </button>
+              <p class="form-note">No spam. No sales pressure. Usually responds within one business day.</p>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-row">
+      <div class="footer-brand">
+        Trailhead<span class="dot">.</span>
+        <small>WebCraft — Sevier County, TN</small>
+      </div>
+      <ul class="footer-nav" role="list">
+        <li><a href="index.html#services">Services</a></li>
+        <li><a href="bca.html">Base Camp Assessment</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="tel:8652176804">865-217-6804</a></li>
+      </ul>
+      <p class="footer-copy">© 2026 Trailhead WebCraft · All rights reserved</p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── Cursor ── */
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let rx = mx, ry = my;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    });
+
+    document.querySelectorAll('a, button, input, select, textarea').forEach(el => {
+      el.addEventListener('mouseenter', () => { dot.classList.add('is-hovering'); ring.classList.add('is-hovering'); });
+      el.addEventListener('mouseleave', () => { dot.classList.remove('is-hovering'); ring.classList.remove('is-hovering'); });
+    });
+
+    (function animateRing() {
+      rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    /* ── Topo Canvas ── */
+    const tc = document.getElementById('topo-canvas').getContext('2d');
+    const tC = document.getElementById('topo-canvas');
+    let TW, TH, topoTime = 0;
+    const centers = [
+      { fx: 0.1, fy: 0.4, startR: 60, step: 55, speed: 0.00022, stretch: 0.6 },
+      { fx: 0.85, fy: 0.55, startR: 70, step: 60, speed: 0.00018, stretch: 0.55 },
+    ];
+    function resizeTopo() { TW = tC.width = window.innerWidth; TH = tC.height = window.innerHeight; }
+    function drawTopo() {
+      tc.clearRect(0, 0, TW, TH); topoTime += 0.007;
+      centers.forEach((c, ci) => {
+        const cx = TW * c.fx, cy = TH * c.fy;
+        const maxR = Math.hypot(TW, TH) * 0.68;
+        for (let r = c.startR; r < maxR; r += c.step) {
+          tc.beginPath();
+          for (let i = 0; i <= 120; i++) {
+            const a = (i / 120) * Math.PI * 2;
+            const nr = r + Math.sin(a * 2.8 + topoTime * 0.9 + ci * 1.4) * 14
+                         + Math.sin(a * 5.5 - topoTime * 0.5 + ci * 2.1) * 7
+                         + Math.cos(a * 9   + topoTime * 1.2 + ci * 0.7) * 4;
+            const x = cx + Math.cos(a) * nr, y = cy + Math.sin(a) * (nr * c.stretch);
+            i === 0 ? tc.moveTo(x, y) : tc.lineTo(x, y);
+          }
+          tc.closePath();
+          tc.strokeStyle = `rgba(78,110,62,${0.55 * (1 - (r / maxR) * 0.6)})`;
+          tc.lineWidth = 0.7; tc.stroke();
+        }
+      });
+      requestAnimationFrame(drawTopo);
+    }
+    resizeTopo(); drawTopo();
+
+    /* ── Particle Canvas ── */
+    const pC = document.getElementById('particle-canvas');
+    const pc = pC.getContext('2d');
+    let PW, PH, particles = [];
+    function resizeP() { PW = pC.width = window.innerWidth; PH = pC.height = window.innerHeight; }
+    function initP() {
+      particles = [];
+      const n = Math.min(55, Math.floor((PW * PH) / 18000));
+      for (let i = 0; i < n; i++) particles.push({
+        x: Math.random() * PW, y: Math.random() * PH,
+        r: 0.7 + Math.random() * 1.8, vx: (Math.random() - 0.5) * 0.25,
+        vy: -0.08 - Math.random() * 0.22, opacity: 0.15 + Math.random() * 0.55,
+        phase: Math.random() * Math.PI * 2, wobble: 0.003 + Math.random() * 0.008,
+      });
+    }
+    function drawP() {
+      pc.clearRect(0, 0, PW, PH);
+      particles.forEach(p => {
+        p.phase += p.wobble; p.x += p.vx + Math.sin(p.phase) * 0.18; p.y += p.vy;
+        if (p.y < -6) { p.y = PH + 6; p.x = Math.random() * PW; }
+        pc.beginPath(); pc.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        pc.fillStyle = `rgba(200,134,10,${p.opacity})`; pc.fill();
+      });
+      requestAnimationFrame(drawP);
+    }
+    window.addEventListener('resize', () => { resizeTopo(); resizeP(); initP(); });
+    resizeP(); initP(); drawP();
+
+    /* ── Scroll Reveal ── */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.reveal').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 100);
+      });
+    });
+
+    /* ── Nav backdrop blur ── */
+    const navEl = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      navEl.style.backdropFilter = window.scrollY > 60 ? 'blur(12px)' : '';
+    }, { passive: true });
+
+  })();
+  </script>
+
+</body>
+</html>
