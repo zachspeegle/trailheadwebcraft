@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase — Base Camp Assessment · Trailhead WebCraft</title>
+  <meta name="description" content="Purchase your Base Camp Assessment for $349. A focused two-hour visibility audit for your Sevier County tourism business.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:            #0a0e07;
+      --bg-surface:    #0f1409;
+      --bg-card:       #141c0d;
+      --text:          #e2d9c4;
+      --text-muted:    #7a8870;
+      --text-faint:    #4a5540;
+      --accent:        #c8860a;
+      --accent-light:  #e09c1a;
+      --accent-glow:   rgba(200, 134, 10, 0.18);
+      --border:        rgba(90, 115, 70, 0.14);
+      --border-mid:    rgba(90, 115, 70, 0.22);
+      --border-accent: rgba(200, 134, 10, 0.28);
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+      cursor: none;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Cursor ── */
+    .cursor-dot {
+      position: fixed; width: 9px; height: 9px; border-radius: 50%;
+      background: var(--accent); pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 8px 3px rgba(200,134,10,0.5), 0 0 22px 8px rgba(200,134,10,0.18);
+      transition: width 0.15s ease, height 0.15s ease;
+    }
+    .cursor-ring {
+      position: fixed; width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid rgba(200,134,10,0.3); pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
+    }
+    .cursor-dot.is-hovering  { width: 14px; height: 14px; }
+    .cursor-ring.is-hovering { width: 52px; height: 52px; border-color: rgba(200,134,10,0.5); }
+
+    /* ── Background ── */
+    #topo-canvas, #particle-canvas {
+      position: fixed; inset: 0; pointer-events: none;
+    }
+    #topo-canvas     { z-index: 0; opacity: 0.05; }
+    #particle-canvas { z-index: 0; opacity: 0.18; }
+
+    .grain-overlay {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.6rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(180deg, rgba(10,14,7,0.9) 0%, transparent 100%);
+    }
+    .nav-wordmark {
+      font-family: 'Fraunces', serif; font-size: 1.05rem;
+      font-weight: 600; letter-spacing: -0.01em; color: var(--text);
+    }
+    .nav-wordmark .dot { color: var(--accent); }
+    .nav-back {
+      font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;
+      transition: color 0.2s ease;
+    }
+    .nav-back:hover { color: var(--accent); }
+
+    /* ── Main layout ── */
+    main {
+      position: relative; z-index: 2;
+      flex: 1;
+      display: flex; align-items: center; justify-content: center;
+      padding: 8rem 2.5rem 5rem;
+    }
+
+    .payment-grid {
+      width: 100%; max-width: 980px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: start;
+    }
+
+    /* ── Left: what they're buying ── */
+    .eyebrow {
+      display: flex; align-items: center; gap: 0.7rem;
+      font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.1rem;
+    }
+    .eyebrow::before {
+      content: ''; display: block; width: 24px; height: 1px;
+      background: var(--accent); opacity: 0.55; flex-shrink: 0;
+    }
+
+    .payment-heading {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700; letter-spacing: -0.025em; line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+    .payment-heading em { font-style: italic; color: var(--accent); font-weight: 300; }
+
+    .payment-desc {
+      font-size: 0.93rem; color: var(--text-muted); line-height: 1.8;
+      margin-bottom: 2.25rem;
+    }
+    .payment-desc strong { color: var(--text); font-weight: 400; }
+
+    /* What's included mini-list */
+    .includes-label {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-faint); margin-bottom: 1rem;
+    }
+
+    .includes-list {
+      list-style: none; display: flex; flex-direction: column;
+      border-top: 1px solid var(--border);
+    }
+
+    .includes-item {
+      display: flex; align-items: flex-start; gap: 0.85rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.86rem; color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .includes-item .check {
+      font-family: 'Space Mono', monospace; font-size: 0.7rem;
+      color: var(--accent); flex-shrink: 0; margin-top: 0.1rem;
+    }
+    .includes-item strong { color: var(--text); font-weight: 400; }
+
+    /* ── Right: payment card ── */
+    .payment-card {
+      background: #0c1108;
+      border: 1px solid var(--border-mid);
+      border-top: 2px solid var(--accent);
+      padding: 2.5rem;
+      position: sticky;
+      top: 7rem;
+    }
+
+    .card-label {
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.75rem;
+    }
+
+    .price-display {
+      display: flex; align-items: baseline; gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .price-amount {
+      font-family: 'Fraunces', serif; font-size: 3.8rem;
+      font-weight: 700; color: var(--text); letter-spacing: -0.03em;
+      line-height: 1;
+    }
+    .price-currency {
+      font-family: 'Space Mono', monospace; font-size: 1rem;
+      color: var(--text-muted); margin-bottom: 0.4rem;
+    }
+    .price-note {
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-faint); margin-bottom: 2rem;
+    }
+
+    .divider {
+      border: none; border-top: 1px solid var(--border);
+      margin: 1.75rem 0;
+    }
+
+    /* The main Stripe CTA */
+    .btn-pay {
+      display: flex; align-items: center; justify-content: center; gap: 0.7rem;
+      width: 100%;
+      background: var(--accent); color: #0a0e07;
+      font-family: 'Space Mono', monospace; font-size: 0.82rem;
+      font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 1.1rem 2rem; border-radius: 2px;
+      border: none; cursor: none;
+      transition: background 0.2s ease, transform 0.2s ease;
+      margin-bottom: 1rem;
+    }
+    .btn-pay:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+
+    .secure-note {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      font-family: 'Space Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-faint);
+    }
+    .secure-note svg { flex-shrink: 0; opacity: 0.5; }
+
+    .card-footer {
+      margin-top: 1.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--text-faint); line-height: 1.9;
+    }
+    .card-footer a {
+      color: var(--accent); transition: color 0.2s ease;
+    }
+    .card-footer a:hover { color: var(--accent-light); }
+
+    /* ── Footer ── */
+    footer {
+      position: relative; z-index: 2;
+      padding: 2rem 2.5rem;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+    }
+    .footer-row {
+      max-width: 980px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-brand {
+      font-family: 'Fraunces', serif; font-size: 0.95rem; font-weight: 600;
+    }
+    .footer-brand .dot { color: var(--accent); }
+    .footer-copy {
+      font-family: 'Space Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.07em; color: var(--text-faint);
+    }
+    .footer-links {
+      display: flex; gap: 1.75rem; list-style: none;
+    }
+    .footer-links a {
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); transition: color 0.2s ease;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── Responsive ── */
+    @media (max-width: 780px) {
+      .payment-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .payment-card { position: static; }
+      main { padding: 7rem 1.5rem 4rem; }
+      nav { padding: 1.25rem 1.5rem; }
+    }
+    @media (pointer: coarse) {
+      .cursor-dot, .cursor-ring { display: none; }
+      body { cursor: auto; }
+      .btn-pay { cursor: pointer; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot"  id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <canvas id="topo-canvas"     aria-hidden="true"></canvas>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+  <div class="grain-overlay"   aria-hidden="true"></div>
+
+  <!-- Nav -->
+  <nav>
+    <a href="index.html" class="nav-wordmark">Trailhead<span class="dot">.</span></a>
+    <a href="bca.html" class="nav-back">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.4"
+          stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back to Assessment
+    </a>
+  </nav>
+
+  <main>
+    <div class="payment-grid">
+
+      <!-- Left: summary -->
+      <div>
+        <p class="eyebrow">One-time purchase</p>
+        <h1 class="payment-heading">
+          Base Camp<br><em>Assessment</em>
+        </h1>
+        <p class="payment-desc">
+          A focused two-hour session that measures your business visibility across
+          ten dimensions of local and AI-powered search. <strong>We implement the
+          three highest-impact fixes before we're done</strong> — and you leave with
+          a written action plan and your complete Trailhead Visibility Score.
+        </p>
+
+        <p class="includes-label">What's included</p>
+        <ul class="includes-list">
+          <li class="includes-item">
+            <span class="check">[✓]</span>
+            <span><strong>Website walkthrough</strong> — first-time tourist perspective</span>
+          </li>
+          <li class="includes-item">
+            <span class="check">[✓]</span>
+            <span><strong>Competitor velocity analysis</strong> — review momentum benchmarked</span>
+          </li>
+          <li class="includes-item">
+            <span class="check">[✓]</span>
+            <span><strong>Google Business Profile audit</strong> — categories corrected on the spot</span>
+          </li>
+          <li class="includes-item">
+            <span class="check">[✓]</span>
+            <span><strong>NAP citation cleanup</strong> — inconsistencies found and prioritized</span>
+          </li>
+          <li class="includes-item">
+            <span class="check">[✓]</span>
+            <span><strong>AI visibility check</strong> — ChatGPT, Google AI Overview, Perplexity</span>
+          </li>
+          <li class="includes-item">
+            <span class="check">[✓]</span>
+            <span><strong>Three live fixes</strong> — implemented during the session</span>
+          </li>
+          <li class="includes-item">
+            <span class="check">[✓]</span>
+            <span><strong>Written action plan</strong> — ranked by impact</span>
+          </li>
+          <li class="includes-item">
+            <span class="check">[✓]</span>
+            <span><strong>Trailhead Visibility Score</strong> — your 100-point baseline</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Right: payment card -->
+      <div>
+        <div class="payment-card">
+          <p class="card-label">Order summary</p>
+
+          <div class="price-display">
+            <span class="price-currency">$</span>
+            <span class="price-amount">349</span>
+          </div>
+          <p class="price-note">One-time · Two-hour session</p>
+
+          <hr class="divider">
+
+          <a href="https://book.stripe.com/5kQ00jffzdi990h3B6gUM00"
+             class="btn-pay"
+             target="_blank"
+             rel="noopener noreferrer">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Pay with Card
+          </a>
+
+          <p class="secure-note">
+            <svg width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true">
+              <rect x="1" y="5" width="9" height="7.5" rx="1.5"
+                stroke="currentColor" stroke-width="1.2"/>
+              <path d="M3.5 5V3.5a2 2 0 014 0V5"
+                stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            Secured by Stripe
+          </p>
+
+          <hr class="divider">
+
+          <div class="card-footer">
+            <div>Questions before purchasing?</div>
+            <div><a href="tel:8652176804">865-217-6804</a> &nbsp;·&nbsp; Mon–Fri 9AM–5PM ET</div>
+            <div style="margin-top:0.5rem;">
+              Or <a href="contact.html">send a message</a> — usually responds same day.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-row">
+      <div class="footer-brand">Trailhead<span class="dot">.</span></div>
+      <ul class="footer-links">
+        <li><a href="bca.html">Assessment Details</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="tel:8652176804">865-217-6804</a></li>
+      </ul>
+      <p class="footer-copy">© 2026 Trailhead WebCraft · All rights reserved</p>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── Cursor ── */
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let rx = mx, ry = my;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    });
+
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        dot.classList.add('is-hovering');
+        ring.classList.add('is-hovering');
+      });
+      el.addEventListener('mouseleave', () => {
+        dot.classList.remove('is-hovering');
+        ring.classList.remove('is-hovering');
+      });
+    });
+
+    (function animateRing() {
+      rx += (mx - rx) * 0.1; ry += (my - ry) * 0.1;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    /* ── Topo Canvas ── */
+    const tC = document.getElementById('topo-canvas');
+    const tc = tC.getContext('2d');
+    let TW, TH, topoTime = 0;
+    const centers = [
+      { fx: 0.15, fy: 0.35, startR: 60, step: 55, stretch: 0.58 },
+      { fx: 0.85, fy: 0.65, startR: 70, step: 60, stretch: 0.55 },
+    ];
+    function resizeTopo() { TW = tC.width = window.innerWidth; TH = tC.height = window.innerHeight; }
+    function drawTopo() {
+      tc.clearRect(0, 0, TW, TH); topoTime += 0.007;
+      centers.forEach((c, ci) => {
+        const cx = TW * c.fx, cy = TH * c.fy;
+        const maxR = Math.hypot(TW, TH) * 0.68;
+        for (let r = c.startR; r < maxR; r += c.step) {
+          tc.beginPath();
+          for (let i = 0; i <= 120; i++) {
+            const a  = (i / 120) * Math.PI * 2;
+            const nr = r
+              + Math.sin(a * 2.8 + topoTime * 0.9 + ci * 1.4) * 14
+              + Math.sin(a * 5.5 - topoTime * 0.5 + ci * 2.1) * 7
+              + Math.cos(a * 9   + topoTime * 1.2 + ci * 0.7) * 4;
+            const x = cx + Math.cos(a) * nr;
+            const y = cy + Math.sin(a) * (nr * c.stretch);
+            i === 0 ? tc.moveTo(x, y) : tc.lineTo(x, y);
+          }
+          tc.closePath();
+          tc.strokeStyle = `rgba(78,110,62,${0.55 * (1 - (r / maxR) * 0.6)})`;
+          tc.lineWidth = 0.7; tc.stroke();
+        }
+      });
+      requestAnimationFrame(drawTopo);
+    }
+    resizeTopo(); drawTopo();
+
+    /* ── Particle Canvas ── */
+    const pC = document.getElementById('particle-canvas');
+    const pc = pC.getContext('2d');
+    let PW, PH, particles = [];
+    function resizeP() { PW = pC.width = window.innerWidth; PH = pC.height = window.innerHeight; }
+    function initP() {
+      particles = [];
+      const n = Math.min(50, Math.floor((PW * PH) / 20000));
+      for (let i = 0; i < n; i++) particles.push({
+        x: Math.random() * PW, y: Math.random() * PH,
+        r: 0.7 + Math.random() * 1.6,
+        vx: (Math.random() - 0.5) * 0.22,
+        vy: -0.07 - Math.random() * 0.2,
+        opacity: 0.15 + Math.random() * 0.5,
+        phase: Math.random() * Math.PI * 2,
+        wobble: 0.003 + Math.random() * 0.008,
+      });
+    }
+    function drawP() {
+      pc.clearRect(0, 0, PW, PH);
+      particles.forEach(p => {
+        p.phase += p.wobble;
+        p.x += p.vx + Math.sin(p.phase) * 0.16;
+        p.y += p.vy;
+        if (p.y < -6) { p.y = PH + 6; p.x = Math.random() * PW; }
+        pc.beginPath(); pc.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        pc.fillStyle = `rgba(200,134,10,${p.opacity})`; pc.fill();
+      });
+      requestAnimationFrame(drawP);
+    }
+    window.addEventListener('resize', () => { resizeTopo(); resizeP(); initP(); });
+    resizeP(); initP(); drawP();
+
+    /* ── Nav backdrop blur ── */
+    const navEl = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      navEl.style.backdropFilter = window.scrollY > 40 ? 'blur(12px)' : '';
+    }, { passive: true });
+
+  })();
+  </script>
+
+</body>
+</html>
