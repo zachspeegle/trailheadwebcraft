@@ -177,13 +177,14 @@
     ───────────────────────────────────────── */
     .cursor-dot {
       position: fixed;
+      top: 0;
+      left: 0;
       width: 9px;
       height: 9px;
       border-radius: 50%;
       background: var(--accent);
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
       box-shadow:
         0 0 8px 3px rgba(200, 134, 10, 0.5),
         0 0 22px 8px rgba(200, 134, 10, 0.18);
@@ -192,13 +193,14 @@
 
     .cursor-ring {
       position: fixed;
+      top: 0;
+      left: 0;
       width: 38px;
       height: 38px;
       border-radius: 50%;
       border: 1px solid rgba(200, 134, 10, 0.3);
       pointer-events: none;
       z-index: 9998;
-      transform: translate(-50%, -50%);
       transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
     }
 
@@ -708,72 +710,6 @@
     }
 
     /* ─────────────────────────────────────────
-       ③b TESTIMONIALS
-    ───────────────────────────────────────── */
-    #testimonials {
-      padding: 7.5rem 2.5rem;
-      background: var(--bg-surface);
-      border-top: 1px solid var(--border);
-    }
-
-    #testimonials .section-heading {
-      margin-bottom: 3.5rem;
-    }
-
-    .testimonials-grid {
-      max-width: 1180px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
-    .testimonial-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-left: 2px solid var(--accent);
-      padding: 2.25rem 2rem;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      transition: background 0.3s ease;
-    }
-
-    .testimonial-card:hover { background: var(--bg-card-hover); }
-
-    .testimonial-card blockquote {
-      font-family: 'Fraunces', serif;
-      font-size: 0.98rem;
-      font-style: italic;
-      font-weight: 300;
-      color: var(--text);
-      line-height: 1.75;
-      opacity: 0.88;
-    }
-
-    .testimonial-card figcaption { margin-top: auto; }
-
-    .testimonial-name {
-      display: block;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 500;
-      font-style: normal;
-      color: var(--text);
-    }
-
-    .testimonial-biz {
-      display: block;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-    }
-
-    /* ─────────────────────────────────────────
        ④ ABOUT
     ───────────────────────────────────────── */
     #about {
@@ -1042,9 +978,6 @@
         grid-template-columns: 1fr;
         gap: 3.5rem;
       }
-      .testimonials-grid {
-        grid-template-columns: 1fr;
-      }
     }
 
     @media (max-width: 680px) {
@@ -1081,7 +1014,6 @@
       .hero-title { font-size: clamp(3.2rem, 14vw, 6rem); }
       #services { padding: 5.5rem 1.5rem; }
       .services-header { margin-bottom: 2.5rem; }
-      #testimonials { padding: 5.5rem 1.5rem; }
       #about { padding: 5.5rem 1.5rem; }
       .about-stats { gap: 2rem; }
       #cta { padding: 6rem 1.5rem; }
@@ -1308,65 +1240,6 @@
   </section>
 
   <!-- ─────────────────────────────────────────
-       ③b TESTIMONIALS
-
-       HOW TO ADD REAL QUOTES:
-       Find the three <figure class="testimonial-card"> blocks below.
-       - Replace the text inside <blockquote> with the client's actual words.
-         2–4 sentences is the sweet spot. Lead with a specific outcome
-         (more bookings, better rankings, first page on Google) if possible.
-       - Replace <cite class="testimonial-name"> with the person's name.
-       - Replace <span class="testimonial-biz"> with their business name
-         and city (e.g. "Smoky Mountain Fudge Kitchen · Gatlinburg, TN").
-       - Remove the <!-- TODO --> comment above each card when filled in.
-       - Consider one quote per service line: SEO, Web Design, Brand.
-  ───────────────────────────────────────── -->
-  <section id="testimonials" aria-label="Client testimonials">
-    <div class="container">
-      <div class="reveal">
-        <p class="eyebrow">From the trail</p>
-        <h2 class="section-heading">What clients say.</h2>
-      </div>
-      <div class="testimonials-grid">
-
-        <!-- TODO: Replace with real client quote — ideally an SEO / BCA client -->
-        <figure class="testimonial-card reveal d1">
-          <blockquote>
-            "Add your first client testimonial here. A result-focused quote works best — something specific like 'we started showing up on the first page within six weeks' gives future clients a concrete sense of what to expect."
-          </blockquote>
-          <figcaption>
-            <cite class="testimonial-name">Client Name</cite>
-            <span class="testimonial-biz">Business Type · Gatlinburg, TN</span>
-          </figcaption>
-        </figure>
-
-        <!-- TODO: Replace with real client quote — ideally a web design client -->
-        <figure class="testimonial-card reveal d2">
-          <blockquote>
-            "Add your second client testimonial here. This card could speak to the experience of working with Zach — communication, turnaround time, the quality of the final product — to complement the outcome-focused quotes."
-          </blockquote>
-          <figcaption>
-            <cite class="testimonial-name">Client Name</cite>
-            <span class="testimonial-biz">Business Type · Pigeon Forge, TN</span>
-          </figcaption>
-        </figure>
-
-        <!-- TODO: Replace with real client quote — ideally a brand identity or long-term client -->
-        <figure class="testimonial-card reveal d3">
-          <blockquote>
-            "Add your third client testimonial here. A quote from a client who has used multiple services (e.g. web + SEO) is ideal for this slot — it reinforces depth of relationship and breadth of capability."
-          </blockquote>
-          <figcaption>
-            <cite class="testimonial-name">Client Name</cite>
-            <span class="testimonial-biz">Business Type · Sevierville, TN</span>
-          </figcaption>
-        </figure>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ─────────────────────────────────────────
        ④ ABOUT
   ───────────────────────────────────────── -->
   <section id="about">
@@ -1521,8 +1394,7 @@
     document.addEventListener('mousemove', e => {
       mx = e.clientX;
       my = e.clientY;
-      dot.style.left = mx + 'px';
-      dot.style.top  = my + 'px';
+      dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
     });
 
     document.querySelectorAll('a, button, .service-card').forEach(el => {
@@ -1539,8 +1411,7 @@
     (function animateRing() {
       rx += (mx - rx) * 0.1;
       ry += (my - ry) * 0.1;
-      ring.style.left = rx + 'px';
-      ring.style.top  = ry + 'px';
+      ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
       requestAnimationFrame(animateRing);
     })();
 
@@ -1559,6 +1430,12 @@
     function resizeTopo() {
       TW = topoCanvas.width  = window.innerWidth;
       TH = topoCanvas.height = window.innerHeight;
+      const maxR = Math.hypot(TW, TH) * 0.65;
+      centers.forEach(c => {
+        c.cx   = TW * c.fx;
+        c.cy   = TH * c.fy;
+        c.maxR = maxR;
+      });
     }
 
     let topoTime = 0;
@@ -1567,9 +1444,9 @@
       topoTime += 0.007;
 
       centers.forEach((c, ci) => {
-        const cx = TW * c.fx;
-        const cy = TH * c.fy;
-        const maxR = Math.hypot(TW, TH) * 0.65;
+        const cx = c.cx;
+        const cy = c.cy;
+        const maxR = c.maxR;
 
         for (let r = c.startR; r < maxR; r += c.step) {
           tc.beginPath();
@@ -1649,10 +1526,12 @@
     initParticles();
     drawParticles();
 
+    let resizeTimer;
     window.addEventListener('resize', () => {
       resizeTopo();
       resizeParticles();
-      initParticles();
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(initParticles, 150);
     });
 
 
