@@ -336,6 +336,29 @@
       background: var(--accent-glow) !important;
     }
 
+    /* ── Hamburger ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 101;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .nav-hamburger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.is-open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
     /* ─────────────────────────────────────────
        BUTTONS
     ───────────────────────────────────────── */
@@ -635,6 +658,122 @@
     }
 
     /* ─────────────────────────────────────────
+       SERVICE CARD — PRICE + CTA
+    ───────────────────────────────────────── */
+    .service-price {
+      font-family: 'Fraunces', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 1.75rem;
+    }
+
+    .service-price small {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 0.2rem;
+    }
+
+    .service-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 1rem;
+      opacity: 0.72;
+      transition: gap 0.2s ease, opacity 0.2s ease;
+    }
+
+    .service-cta:hover { gap: 0.7rem; opacity: 1; }
+
+    /* ─────────────────────────────────────────
+       HERO PRICE HINT
+    ───────────────────────────────────────── */
+    .hero-price-hint {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.64rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-top: 1.1rem;
+    }
+
+    /* ─────────────────────────────────────────
+       ③b TESTIMONIALS
+    ───────────────────────────────────────── */
+    #testimonials {
+      padding: 7.5rem 2.5rem;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+    }
+
+    #testimonials .section-heading {
+      margin-bottom: 3.5rem;
+    }
+
+    .testimonials-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 2px solid var(--accent);
+      padding: 2.25rem 2rem;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      transition: background 0.3s ease;
+    }
+
+    .testimonial-card:hover { background: var(--bg-card-hover); }
+
+    .testimonial-card blockquote {
+      font-family: 'Fraunces', serif;
+      font-size: 0.98rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.75;
+      opacity: 0.88;
+    }
+
+    .testimonial-card figcaption { margin-top: auto; }
+
+    .testimonial-name {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      font-style: normal;
+      color: var(--text);
+    }
+
+    .testimonial-biz {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ─────────────────────────────────────────
        ④ ABOUT
     ───────────────────────────────────────── */
     #about {
@@ -903,15 +1042,46 @@
         grid-template-columns: 1fr;
         gap: 3.5rem;
       }
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 680px) {
       nav { padding: 1.25rem 1.5rem; }
+      .nav-hamburger { display: flex; }
       .nav-links { display: none; }
+      .nav-links.is-open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 0;
+        top: 0;
+        background: rgba(10, 14, 7, 0.97);
+        backdrop-filter: blur(14px);
+        padding: 5.5rem 2rem 3rem;
+        z-index: 99;
+        gap: 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links.is-open li { border-bottom: 1px solid var(--border); }
+      .nav-links.is-open li:first-child { border-top: 1px solid var(--border); }
+      .nav-links.is-open a {
+        display: block;
+        padding: 1.1rem 0;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+      .nav-links.is-open .nav-cta-link {
+        margin-top: 1.5rem;
+        display: inline-block;
+        padding: 0.75rem 1.5rem !important;
+      }
       #hero { padding: 7.5rem 1.5rem 5rem; }
       .hero-title { font-size: clamp(3.2rem, 14vw, 6rem); }
       #services { padding: 5.5rem 1.5rem; }
       .services-header { margin-bottom: 2.5rem; }
+      #testimonials { padding: 5.5rem 1.5rem; }
       #about { padding: 5.5rem 1.5rem; }
       .about-stats { gap: 2rem; }
       #cta { padding: 6rem 1.5rem; }
@@ -942,12 +1112,16 @@
   ───────────────────────────────────────── -->
   <nav aria-label="Main navigation">
     <a href="/" class="nav-wordmark">Trailhead<span class="dot">.</span></a>
-    <ul class="nav-links" role="list">
+    <ul class="nav-links" id="navLinks" role="list">
       <li><a href="#services">Services</a></li>
       <li><a href="#about">About</a></li>
+      <li><a href="bca.html">Base Camp Assessment</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="bca.html" class="nav-cta-link">Start Here</a></li>
     </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- ─────────────────────────────────────────
@@ -976,6 +1150,7 @@
         </a>
         <a href="bca.html" class="btn btn-outline">Start Here</a>
       </div>
+      <p class="hero-price-hint reveal d3">Base Camp Assessment — $349 &nbsp;·&nbsp; No contract, no retainer required</p>
     </div>
     <div class="hero-scroll" aria-hidden="true">
       <span>Scroll</span>
@@ -1055,6 +1230,10 @@
           no generic layouts, nothing off the shelf.
         </p>
         <p class="service-tags">Design &nbsp;·&nbsp; UX &nbsp;·&nbsp; Visual Systems</p>
+        <p class="service-price">Custom<small>Quoted per project</small></p>
+        <a href="contact.html" class="service-cta">
+          Get a Quote <svg width="11" height="11" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
 
       <!-- Search Optimization -->
@@ -1082,6 +1261,10 @@
           retainer work keeps you climbing while competitors stay still.
         </p>
         <p class="service-tags">Local SEO &nbsp;·&nbsp; GBP &nbsp;·&nbsp; AI Visibility</p>
+        <p class="service-price">$349<small>Base Camp Assessment · Retainers from $397/mo</small></p>
+        <a href="bca.html" class="service-cta">
+          See What's Included <svg width="11" height="11" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
 
       <!-- Brand Identity -->
@@ -1115,8 +1298,71 @@
           clear, consistent, and unmistakable from any vantage point on the map.
         </p>
         <p class="service-tags">Logo &nbsp;·&nbsp; Identity &nbsp;·&nbsp; Style Systems</p>
+        <p class="service-price">Custom<small>Quoted per project</small></p>
+        <a href="contact.html" class="service-cta">
+          Get a Quote <svg width="11" height="11" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1.5 6.5h10M7.5 2.5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────
+       ③b TESTIMONIALS
+
+       HOW TO ADD REAL QUOTES:
+       Find the three <figure class="testimonial-card"> blocks below.
+       - Replace the text inside <blockquote> with the client's actual words.
+         2–4 sentences is the sweet spot. Lead with a specific outcome
+         (more bookings, better rankings, first page on Google) if possible.
+       - Replace <cite class="testimonial-name"> with the person's name.
+       - Replace <span class="testimonial-biz"> with their business name
+         and city (e.g. "Smoky Mountain Fudge Kitchen · Gatlinburg, TN").
+       - Remove the <!-- TODO --> comment above each card when filled in.
+       - Consider one quote per service line: SEO, Web Design, Brand.
+  ───────────────────────────────────────── -->
+  <section id="testimonials" aria-label="Client testimonials">
+    <div class="container">
+      <div class="reveal">
+        <p class="eyebrow">From the trail</p>
+        <h2 class="section-heading">What clients say.</h2>
+      </div>
+      <div class="testimonials-grid">
+
+        <!-- TODO: Replace with real client quote — ideally an SEO / BCA client -->
+        <figure class="testimonial-card reveal d1">
+          <blockquote>
+            "Add your first client testimonial here. A result-focused quote works best — something specific like 'we started showing up on the first page within six weeks' gives future clients a concrete sense of what to expect."
+          </blockquote>
+          <figcaption>
+            <cite class="testimonial-name">Client Name</cite>
+            <span class="testimonial-biz">Business Type · Gatlinburg, TN</span>
+          </figcaption>
+        </figure>
+
+        <!-- TODO: Replace with real client quote — ideally a web design client -->
+        <figure class="testimonial-card reveal d2">
+          <blockquote>
+            "Add your second client testimonial here. This card could speak to the experience of working with Zach — communication, turnaround time, the quality of the final product — to complement the outcome-focused quotes."
+          </blockquote>
+          <figcaption>
+            <cite class="testimonial-name">Client Name</cite>
+            <span class="testimonial-biz">Business Type · Pigeon Forge, TN</span>
+          </figcaption>
+        </figure>
+
+        <!-- TODO: Replace with real client quote — ideally a brand identity or long-term client -->
+        <figure class="testimonial-card reveal d3">
+          <blockquote>
+            "Add your third client testimonial here. A quote from a client who has used multiple services (e.g. web + SEO) is ideal for this slot — it reinforces depth of relationship and breadth of capability."
+          </blockquote>
+          <figcaption>
+            <cite class="testimonial-name">Client Name</cite>
+            <span class="testimonial-biz">Business Type · Sevierville, TN</span>
+          </figcaption>
+        </figure>
+
+      </div>
     </div>
   </section>
 
@@ -1434,7 +1680,27 @@
     });
 
 
-    /* ── 5. Nav: backdrop blur on scroll ── */
+    /* ── 5. Mobile hamburger menu ── */
+    const hamburger = document.getElementById('navHamburger');
+    const navLinks  = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('is-open');
+      hamburger.classList.toggle('is-open');
+      hamburger.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('is-open');
+        hamburger.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+
+    /* ── 6. Nav: backdrop blur on scroll ── */
     const navEl = document.querySelector('nav');
     const scrollWatcher = new IntersectionObserver(
       ([entry]) => navEl.style.backdropFilter = entry.isIntersecting ? '' : 'blur(12px)',
