@@ -131,6 +131,29 @@
     }
     .nav-cta-link:hover { background: var(--accent-glow) !important; }
 
+    /* ── Hamburger ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 101;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .nav-hamburger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.is-open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
     /* ─────────────────────────────────────────
        LAYOUT
     ───────────────────────────────────────── */
@@ -600,7 +623,34 @@
 
     @media (max-width: 680px) {
       nav { padding: 1.25rem 1.5rem; }
+      .nav-hamburger { display: flex; }
       .nav-links { display: none; }
+      .nav-links.is-open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 0;
+        top: 0;
+        background: rgba(10, 14, 7, 0.97);
+        backdrop-filter: blur(14px);
+        padding: 5.5rem 2rem 3rem;
+        z-index: 99;
+        gap: 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links.is-open li { border-bottom: 1px solid var(--border); }
+      .nav-links.is-open li:first-child { border-top: 1px solid var(--border); }
+      .nav-links.is-open a {
+        display: block;
+        padding: 1.1rem 0;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+      .nav-links.is-open .nav-cta-link {
+        margin-top: 1.5rem;
+        display: inline-block;
+        padding: 0.75rem 1.5rem !important;
+      }
       #hero { padding: 7.5rem 1.5rem 5rem; }
       .hero-title { font-size: clamp(3rem, 13vw, 5rem); }
       #intro, #steps, #deliverables, #tvs, #cta { padding-left: 1.5rem; padding-right: 1.5rem; }
@@ -633,12 +683,16 @@
   ───────────────────────────────────────── -->
   <nav aria-label="Main navigation">
     <a href="index.html" class="nav-wordmark">Trailhead<span class="dot">.</span></a>
-    <ul class="nav-links" role="list">
+    <ul class="nav-links" id="navLinks" role="list">
       <li><a href="index.html#services">Services</a></li>
       <li><a href="index.html#about">About</a></li>
-      <li><a href="#cta" class="nav-active">Base Camp Assessment</a></li>
-      <li><a href="tel:8652176804" class="nav-cta-link">865-217-6804</a></li>
+      <li><a href="bca.html" class="nav-active">Base Camp Assessment</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="payment.html" class="nav-cta-link">Start Here</a></li>
     </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- ─────────────────────────────────────────
@@ -1050,6 +1104,7 @@
         <li><a href="index.html#services">Services</a></li>
         <li><a href="index.html#about">About</a></li>
         <li><a href="bca.html">Base Camp Assessment</a></li>
+        <li><a href="contact.html">Contact</a></li>
         <li><a href="tel:8652176804">865-217-6804</a></li>
       </ul>
       <p class="footer-copy">© 2026 Trailhead WebCraft · All rights reserved</p>
@@ -1218,7 +1273,27 @@
     });
 
 
-    /* ── 5. Nav backdrop blur on scroll ── */
+    /* ── 5. Mobile hamburger menu ── */
+    const hamburger = document.getElementById('navHamburger');
+    const navLinks  = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('is-open');
+      hamburger.classList.toggle('is-open');
+      hamburger.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('is-open');
+        hamburger.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+
+    /* ── 6. Nav backdrop blur on scroll ── */
     const navEl = document.querySelector('nav');
     const scrollWatcher = new IntersectionObserver(
       ([entry]) => navEl.style.backdropFilter = entry.isIntersecting ? '' : 'blur(12px)',
