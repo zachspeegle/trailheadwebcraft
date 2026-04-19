@@ -91,6 +91,36 @@
     }
     .nav-links a:hover { color: var(--text); }
     .nav-active { color: var(--accent) !important; }
+    .nav-cta-link {
+      border: 1px solid var(--border-accent) !important;
+      color: var(--accent) !important;
+      padding: 0.45rem 1.1rem; border-radius: 2px;
+      transition: background 0.2s ease !important;
+    }
+    .nav-cta-link:hover { background: var(--accent-glow) !important; }
+
+    /* ── Hamburger ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 101;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .nav-hamburger.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.is-open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
     /* ── Layout ── */
     section { position: relative; z-index: 2; }
@@ -292,7 +322,34 @@
     }
     @media (max-width: 580px) {
       nav { padding: 1.25rem 1.5rem; }
+      .nav-hamburger { display: flex; }
       .nav-links { display: none; }
+      .nav-links.is-open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 0;
+        top: 0;
+        background: rgba(10, 14, 7, 0.97);
+        backdrop-filter: blur(14px);
+        padding: 5.5rem 2rem 3rem;
+        z-index: 99;
+        gap: 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .nav-links.is-open li { border-bottom: 1px solid var(--border); }
+      .nav-links.is-open li:first-child { border-top: 1px solid var(--border); }
+      .nav-links.is-open a {
+        display: block;
+        padding: 1.1rem 0;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+      .nav-links.is-open .nav-cta-link {
+        margin-top: 1.5rem;
+        display: inline-block;
+        padding: 0.75rem 1.5rem !important;
+      }
       .page-wrapper { padding: 7.5rem 1.5rem 5rem; }
       .contact-form-wrap { padding: 2rem 1.75rem; }
       .form-row { grid-template-columns: 1fr; }
@@ -319,12 +376,16 @@
   <!-- Nav -->
   <nav aria-label="Main navigation">
     <a href="index.html" class="nav-wordmark">Trailhead<span class="dot">.</span></a>
-    <ul class="nav-links" role="list">
+    <ul class="nav-links" id="navLinks" role="list">
       <li><a href="index.html#services">Services</a></li>
-      <li><a href="bca.html">Base Camp Assessment</a></li>
       <li><a href="index.html#about">About</a></li>
+      <li><a href="bca.html">Base Camp Assessment</a></li>
       <li><a href="contact.html" class="nav-active">Contact</a></li>
+      <li><a href="bca.html" class="nav-cta-link">Start Here</a></li>
     </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- Main -->
@@ -428,8 +489,8 @@
       </div>
       <ul class="footer-nav" role="list">
         <li><a href="index.html#services">Services</a></li>
-        <li><a href="bca.html">Base Camp Assessment</a></li>
         <li><a href="index.html#about">About</a></li>
+        <li><a href="bca.html">Base Camp Assessment</a></li>
         <li><a href="tel:8652176804">865-217-6804</a></li>
       </ul>
       <p class="footer-copy">© 2026 Trailhead WebCraft · All rights reserved</p>
@@ -531,6 +592,26 @@
     requestAnimationFrame(() => {
       document.querySelectorAll('.reveal').forEach((el, i) => {
         setTimeout(() => el.classList.add('visible'), i * 100);
+      });
+    });
+
+    /* ── Mobile hamburger menu ── */
+    const hamburger = document.getElementById('navHamburger');
+    const navLinks  = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('is-open');
+      hamburger.classList.toggle('is-open');
+      hamburger.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('is-open');
+        hamburger.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
       });
     });
 
